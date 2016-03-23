@@ -12,7 +12,10 @@ class DemoController
 
     public function sortAction()
     {
+        $numbers = explode(' ', $_POST['numbers']);
+        sort($numbers);
 
+        include 'views/demo/sort.php';
     }
 
     public function helloAction()
