@@ -5,12 +5,18 @@
  * Date: 23.03.2016
  * Time: 23:15
  */
-/** @var string[] $numbers */ //ÛÍ‡Á˚‚‡ÂÚ ˜ÚÓ numbers - Ï‡ÒÒË‚ ÒÚÓÍ
+/** @var string[] $numbers */ //—É–∫–∞–∑—ã–≤–∞–µ—Ç —á—Ç–æ numbers - –º–∞—Å—Å–∏–≤ —Å—Ç—Ä–æ–∫
+/** @var string[] $errors */
 ?>
 <form method="post">
-    <textarea name="numbers"></textarea> <!-- ËÏˇ ÚÂÍÒÚ‡Â‡ - ËÏˇ ˇ˜ÂÈÍË ‚ post -->
+    <textarea name="numbers"></textarea> <!-- –∏–º—è —Ç–µ–∫—Å—Ç–∞—Ä–µ–∞ - –∏–º—è —è—á–µ–π–∫–∏ –≤ post -->
     <br>
     <button type="submit">Send</button>
 </form>
 <hr>
-<?= join(' ', $numbers) ?>
+<? if ($errors) { ?>
+    –ü—Ä–æ–∏–∑–æ—à–ª–∏ —Å–ª–µ–¥—É—é—â–∏–µ –æ—à–∏–±–∫–∏: <br>
+    <?= join('<br>', $errors) ?>
+<? } else { ?>
+    <?= join(' ', $numbers) ?>
+<? } ?>
