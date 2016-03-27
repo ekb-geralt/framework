@@ -13,21 +13,23 @@ class DemoController
     public function sortAction()
     {
         $errors = [];
-        $numbers = str_replace(["\n", "\r"], ' ', $_POST['numbers']);
-        $numbers = explode(' ', $numbers);
-        $numbers = array_filter($numbers, function ($number) {
-            return $number != '';
-        });
-        if (!$numbers) {
-            $errors[] = "Пустая строка.";
-        }
-        foreach ($numbers as $number) {
-            if (!is_numeric($number)) {
-                $errors[] = '"' . $number . '" не число!';
+        if (isset($_POST['numbers'])) {
+            $numbers = str_replace(["\n", "\r"], ' ', $_POST['numbers']);
+            $numbers = explode(' ', $numbers);
+            $numbers = array_filter($numbers, function ($number) {
+                return $number != '';
+            });
+            if (!$numbers) {
+                $errors[] = "Пустая строка.";
             }
-        }
-        if (!$errors) { //пуустой массив кастуется как false
-            sort($numbers);
+            foreach ($numbers as $number) {
+                if (!is_numeric($number)) {
+                    $errors[] = '"' . $number . '" не число!';
+                }
+            }
+            if (!$errors) { //пустой массив кастуется как false
+                sort($numbers);
+            }
         }
         include 'views/demo/sort.php';
     }
