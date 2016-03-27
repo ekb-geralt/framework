@@ -9,6 +9,10 @@
 class Application
 {
     public $defaultControllerName = 'demo';
+    /**
+     * @var Request
+     */
+    public $request;
 
     /**
      * @param null $controllerName
@@ -26,7 +30,9 @@ class Application
             throw new Exception('Нет такого контроллера');
         }
         require_once $fileName;
+        $controller = new $className();
+        $controller->app = $this; //связываем аппликейшн с контроллером для того чтобы конороллер он мог узнать в каком приложении он запущен и обратиться к другим модулям этого приложения
 
-        return new $className();
+        return $controller;
     }
 }

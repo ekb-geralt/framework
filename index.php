@@ -11,10 +11,13 @@
 ini_set('display_errors',  '1');
 header('Content-Type: text/html; charset=utf-8');
 require_once 'Application.php';
-
+require_once 'Request.php';
 require_once 'UrlManager.php';
+
+$request = new Request();
 $urlManager = new UrlManager();
 $route = $urlManager->getCurrentRoute();
 $application = new Application();
+$application->request = $request;
 $controller = $application->getController($route->controllerName);
 $controller->execute($route->actionName);
