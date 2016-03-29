@@ -15,6 +15,11 @@ class Application
     public $request;
 
     /**
+     * @var Autoloader
+     */
+    public $autoloader;
+
+    /**
      * @param null $controllerName
      * @return DemoController
      * @throws Exception
@@ -25,13 +30,11 @@ class Application
             $controllerName = $this->defaultControllerName;
         }
         $className = ucfirst($controllerName) . 'Controller';
-        $fileName = $className . '.php';
-        if (!file_exists($fileName)) { //удостоверяемся в том, что такой класс существует
-            throw new Exception('Нет такого контроллера');
+        if (!$this->autoloader->canLoad($className)) { //СѓРґРѕСЃС‚РѕРІРµСЂСЏРµРјСЃСЏ РІ С‚РѕРј, С‡С‚Рѕ С‚Р°РєРѕР№ РєР»Р°СЃСЃ СЃСѓС‰РµСЃС‚РІСѓРµС‚
+            throw new Exception('РќРµС‚ С‚Р°РєРѕРіРѕ РєРѕРЅС‚СЂРѕР»Р»РµСЂР°');
         }
-        require_once $fileName;
         $controller = new $className();
-        $controller->app = $this; //связываем аппликейшн с контроллером для того чтобы конороллер он мог узнать в каком приложении он запущен и обратиться к другим модулям этого приложения
+        $controller->app = $this; //СЃРІСЏР·С‹РІР°РµРј Р°РїРїР»РёРєРµР№С€РЅ СЃ РєРѕРЅС‚СЂРѕР»Р»РµСЂРѕРј РґР»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ РєРѕРЅРѕСЂРѕР»Р»РµСЂ РѕРЅ РјРѕРі СѓР·РЅР°С‚СЊ РІ РєР°РєРѕРј РїСЂРёР»РѕР¶РµРЅРёРё РѕРЅ Р·Р°РїСѓС‰РµРЅ Рё РѕР±СЂР°С‚РёС‚СЊСЃСЏ Рє РґСЂСѓРіРёРј РјРѕРґСѓР»СЏРј СЌС‚РѕРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ
 
         return $controller;
     }

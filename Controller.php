@@ -6,7 +6,7 @@
  * Date: 27.03.2016
  * Time: 22:11
  */
-abstract class Controller //с abstract запрещается создание экземпляра этого класса
+abstract class Controller //СЃ abstract Р·Р°РїСЂРµС‰Р°РµС‚СЃСЏ СЃРѕР·РґР°РЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 {
     public $defaultActionName = 'default';
     /**
@@ -23,23 +23,23 @@ abstract class Controller //с abstract запрещается создание экземпляра этого кла
         if (method_exists($this, $methodName)) {
             $this->$methodName();
         } else {
-            throw new Exception('Нет такого действия.');
+            throw new Exception('РќРµС‚ С‚Р°РєРѕРіРѕ РґРµР№СЃС‚РІРёСЏ.');
         }
     }
 
     public function getName()
     {
         $className = get_class($this);
-        $controllerName = substr($className, 0, strrpos($className, 'Controller')); //проверить что счет совпадает, напр. сфбстр считает с 0, а стрпос точно ли с 0 считет, совпадают ли позиции, отсчитывать 5 символов включительно или исключительно
+        $controllerName = substr($className, 0, strrpos($className, 'Controller')); //РїСЂРѕРІРµСЂРёС‚СЊ С‡С‚Рѕ СЃС‡РµС‚ СЃРѕРІРїР°РґР°РµС‚, РЅР°РїСЂ. СЃС„Р±СЃС‚СЂ СЃС‡РёС‚Р°РµС‚ СЃ 0, Р° СЃС‚СЂРїРѕСЃ С‚РѕС‡РЅРѕ Р»Рё СЃ 0 СЃС‡РёС‚РµС‚, СЃРѕРІРїР°РґР°СЋС‚ Р»Рё РїРѕР·РёС†РёРё, РѕС‚СЃС‡РёС‚С‹РІР°С‚СЊ 5 СЃРёРјРІРѕР»РѕРІ РІРєР»СЋС‡РёС‚РµР»СЊРЅРѕ РёР»Рё РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅРѕ
 
         return $controllerName;
     }
 
     public function render($viewName, $data = [])
     {
-        $__fileName = 'views/' . $this->getName() . '/' . $viewName . '.php'; //сделно через __имя, чтобы избежать прихода аналогичного имени из data
+        $__fileName = 'views/' . $this->getName() . '/' . $viewName . '.php'; //СЃРґРµР»РЅРѕ С‡РµСЂРµР· __РёРјСЏ, С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ РїСЂРёС…РѕРґР° Р°РЅР°Р»РѕРіРёС‡РЅРѕРіРѕ РёРјРµРЅРё РёР· data
         if (!file_exists($__fileName)) {
-            throw new Exception('Нет такого представления.'); // представление - вьюха
+            throw new Exception('РќРµС‚ С‚Р°РєРѕРіРѕ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ.'); // РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ - РІСЊСЋС…Р°
         }
         extract($data);
 

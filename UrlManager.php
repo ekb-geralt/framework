@@ -6,8 +6,6 @@
  * Date: 16.03.2016
  * Time: 20:31
  */
-require_once 'Route.php';
-
 class UrlManager
 {
     /**

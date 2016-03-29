@@ -6,7 +6,6 @@
  * Date: 17.03.2016
  * Time: 0:49
  */
-require_once 'Controller.php';
 class DemoController extends Controller
 {
     public $defaultActionName = 'hello'; //перегрузили значение свойства Controller::$defaultActionName
@@ -15,7 +14,7 @@ class DemoController extends Controller
     {
         $errors = [];
         $numbers = [];
-        $strNumbers = $this->app->request->getParam('numbers');
+        $strNumbers = $this->app->request->numbers; //numbers - несуществующее свойство, к которому мы обращаемся и поэтому вызывается магический метод __get из того объекта в котором не было найдено свойство; возвращает значение неизвестного или необъявленного свойства
         if (isset($strNumbers)) {
             $numbers = str_replace(["\n", "\r"], ' ', $strNumbers);
             $numbers = explode(' ', $numbers);

@@ -10,14 +10,15 @@
 //framework.local(название сайта)/news(название контроллера-модуль отвечающий за работу с определенными однотипными данными, в данном случае - с новостями)/list(экшен)?sort=date(параметры)
 ini_set('display_errors',  '1');
 header('Content-Type: text/html; charset=utf-8');
-require_once 'Application.php';
-require_once 'Request.php';
-require_once 'UrlManager.php';
+require_once 'Autoloader.php';
 
+$autoloader = new Autoloader();
+$autoloader->register();
 $request = new Request();
 $urlManager = new UrlManager();
 $route = $urlManager->getCurrentRoute();
 $application = new Application();
 $application->request = $request;
+$application->autoloader = $autoloader;
 $controller = $application->getController($route->controllerName);
 $controller->execute($route->actionName);
