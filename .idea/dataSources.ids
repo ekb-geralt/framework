@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="MySQL - Geralt@buncha.ru" uuid="e1605f9d-0241-461f-8d44-404fd461126d">
+    <database-info product="MySQL" version="5.5.38-0+wheezy1" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
+      <extra-name-characters>#@</extra-name-characters>
+      <identifier-quote-string>`</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact"/>
+    <schema name="" catalog="Geralt"/>
+    <table name="cities" schema="" catalog="Geralt" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="population" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="isCapital" sqlType="TINYINT" precision="3" scale="0" nullable="true" jdbcType="-6"/>
+      <column name="creationDate" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="unemploymentRate" sqlType="FLOAT UNSIGNED" precision="5" scale="4" nullable="true" jdbcType="7"/>
+      <column name="countryId" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="cities_countryId__countries_id" columns="countryId" ref-table="countries" ref-schema="" ref-catalog="Geralt" ref-columns="id" update-rule="0" delete-rule="3" deferrability="2"/>
+      <exported-key name="countries_capitalId__cities_id" table="countries" schema="" catalog="Geralt" columns="capitalId"/>
+      <index name="cities_countryId__countries_id" unique="false" columns="countryId"/>
+    </table>
+    <table name="countries" schema="" catalog="Geralt" type="TABLE">
+      <column name="id" sqlType="INT" precision="10" scale="0" nullable="false" jdbcType="4" autoIncrement="true"/>
+      <column name="name" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="capitalId" sqlType="INT" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <primary-key name="PRIMARY" columns="id"/>
+      <foreign-key name="countries_capitalId__cities_id" columns="capitalId" ref-table="cities" ref-schema="" ref-catalog="Geralt" ref-columns="id" update-rule="0" delete-rule="3" deferrability="2"/>
+      <exported-key name="cities_countryId__countries_id" table="cities" schema="" catalog="Geralt" columns="countryId"/>
+      <index name="countries_capitalId" unique="true" columns="capitalId"/>
+    </table>
+  </data-source>
+</component>

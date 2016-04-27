@@ -14,6 +14,10 @@ require_once 'Autoloader.php';
 
 $autoloader = new Autoloader();
 $autoloader->register();
+//$database = new Database();
+//$database->connect('Buncha.ru', 'root', 'pi31415', 'Geralt');
+//$queryData = $database->sendQuery('SELECT * FROM cities`LEFT JOIN countries ON cities.countryId = countries.id');
+//print_r($queryData);
 $request = new Request();
 $urlManager = new UrlManager();
 $route = $urlManager->getCurrentRoute();
