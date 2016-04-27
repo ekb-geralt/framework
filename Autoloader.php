@@ -18,13 +18,13 @@ class Autoloader
         require_once $this->getFileName($className);
     }
 
-    public function register() // Â„ÂÒÚËÛÂÚ ÏÂÚÓ‰ ÎÓ‡‰ Í‡Í ‡‚ÚÓÁ‡„ÛÁ˜ËÍ
+    public function register() // —Ä–µ–≥–µ—Å—Ç—Ä–∏—Ä—É–µ—Ç –º–µ—Ç–æ–¥ –ª–æ–∞–¥ –∫–∞–∫ –∞–≤—Ç–æ–∑–∞–≥—Ä—É–∑—á–∏–∫
     {
-        spl_autoload_register([$this, 'load']); // [$this, 'load'] - ÒÒ˚ÎÍ‡ Ì‡ Ï‡ÚÓ‰ ÎÓ‡‰ Ó·˙ÂÍÚ‡ Á˚Ò, Ú‡ÍËÂ ÒÒ˚ÎÍË ‡·ÓÚÓÒÔÓÒÓ·Ì˚ ÚÓÎ¸ÍÓ ‰Îˇ ÙÛÌÍˆËÈ ‚ÒÚÓÂÌÌ˚ı ‚ ÔıÔ
+        spl_autoload_register([$this, 'load']); // [$this, 'load'] - —Å—Å—ã–ª–∫–∞ –Ω–∞ –º–∞—Ç–æ–¥ –ª–æ–∞–¥ –æ–±—ä–µ–∫—Ç–∞ –∑—ã—Å, —Ç–∞–∫–∏–µ —Å—Å—ã–ª–∫–∏ —Ä–∞–±–æ—Ç–æ—Å–ø–æ—Å–æ–±–Ω—ã —Ç–æ–ª—å–∫–æ –¥–ª—è —Ñ—É–Ω–∫—Ü–∏–π –≤—Å—Ç—Ä–æ–µ–Ω–Ω—ã—Ö –≤ –ø—Ö–ø
     }
 
     public function canLoad($className)
     {
-        return file_exists($this->getFileName($className)); // ˝ÍÒÔÂ¯Ì ‰‡ÂÚ ÚÛ ÂÒÎË Ù‡ÈÎ ÒÛ˘ÂÒÚ‚ÛÂÚ
+        return file_exists($this->getFileName($className)); // —ç–∫—Å–ø—Ä–µ—à–Ω –¥–∞–µ—Ç —Ç—Ä—É –µ—Å–ª–∏ —Ñ–∞–π–ª —Å—É—â–µ—Å—Ç–≤—É–µ—Ç
     }
 }

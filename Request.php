@@ -10,10 +10,10 @@ class Request
 {
     public function getParam($paramName)
     {
-        return isset($_REQUEST[$paramName]) ? $_REQUEST[$paramName] : null; //âîçâðàùàåì ïàðàìåòð åñëè îí çàäàí èëè íóëë åñëè íå çàäàí. à åñëè íå ïðîïèñàòü íóëë îòäåëüíî, òî áóäåò îøèáêà
+        return isset($_REQUEST[$paramName]) ? $_REQUEST[$paramName] : null; //Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€ ÐµÑÐ»Ð¸ Ð¾Ð½ Ð·Ð°Ð´Ð°Ð½ Ð¸Ð»Ð¸ Ð½ÑƒÐ»Ð» ÐµÑÐ»Ð¸ Ð½Ðµ Ð·Ð°Ð´Ð°Ð½. Ð° ÐµÑÐ»Ð¸ Ð½Ðµ Ð¿Ñ€Ð¾Ð¿Ð¸ÑÐ°Ñ‚ÑŒ Ð½ÑƒÐ»Ð» Ð¾Ñ‚Ð´ÐµÐ»ÑŒÐ½Ð¾, Ñ‚Ð¾ Ð±ÑƒÐ´ÐµÑ‚ Ð¾ÑˆÐ¸Ð±ÐºÐ°
     }
 
-    public function __get($propertyName) //ìàãèÿ
+    public function __get($propertyName) //Ð¼Ð°Ð³Ð¸Ñ
     {
         return $this->getParam($propertyName);
     }
