@@ -18,6 +18,10 @@ $autoloader->register();
 //$database->connect('Buncha.ru', 'root', 'pi31415', 'Geralt');
 //$queryData = $database->sendQuery('SELECT * FROM cities`LEFT JOIN countries ON cities.countryId = countries.id');
 //print_r($queryData);
+//$query = new Query();
+//echo $query->select(['cities.name as City', 'countries.name as Country'])->from(['cities', 'countries'])->getText();
+
+
 $request = new Request();
 $urlManager = new UrlManager();
 $route = $urlManager->getCurrentRoute();
