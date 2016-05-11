@@ -16,6 +16,14 @@ class Query
      * @var string[]
      */
     protected $from;
+    /**
+     * @var Database
+     */
+    protected $database;
+    /**
+     * @var array
+     */
+    protected $where;
 
     public function select($columnNames = '*') //в скобках дефолтный параметр
     {
@@ -77,7 +85,9 @@ class Query
 
     public function getText()
     {
-        return 'select ' . join(', ', $this->select) . ' from ' . join(', ', $this->from);
+        return 'select ' . join(', ', $this->select)
+            . ' from ' . join(', ', $this->from)
+            . ' where ' . $this->formatCondition($this->where);
     }
 
     /**
@@ -102,5 +112,29 @@ class Query
         }
 
         return $name;
+    }
+
+    public function __construct($database) //метод конструктор, запускается при создании объекта класса, выполняется на нем же. Теперь Квери знает с какой БД работает. Это надо для мскули ескапе стринг
+    {
+        $this->database = $database;
+    }
+
+    protected function formatCondition($condition)
+    {
+        switch ($condition[0]) {
+            case '=':
+                return $this->escapeName($condition[1]) . ' = ' . $this->database->connection->real_escape_string($condition[2]);
+            case 'and':
+                return join(' and ', array_map([$this, 'formatCondition'], array_slice($condition, 1)));
+        }
+
+        throw new Exception('Неподдерживаемый оператор');
+    }
+
+    public function where($condition) //condition - условие
+    {
+        $this->where = $condition;
+
+        return $this;
     }
 }

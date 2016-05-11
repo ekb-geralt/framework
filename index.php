@@ -14,12 +14,16 @@ require_once 'Autoloader.php';
 
 $autoloader = new Autoloader();
 $autoloader->register();
-//$database = new Database();
-//$database->connect('Buncha.ru', 'root', 'pi31415', 'Geralt');
+$database = new Database();
+$database->connect('Buncha.ru', 'root', 'pi31415', 'Geralt');
 //$queryData = $database->sendQuery('SELECT * FROM cities`LEFT JOIN countries ON cities.countryId = countries.id');
 //print_r($queryData);
-//$query = new Query();
-//echo $query->select(['cities.name as City', 'countries.name as Country'])->from(['cities', 'countries'])->getText();
+$query = new Query($database);
+echo $query
+    ->select(['cities.name as City', 'countries.name as Country'])
+    ->from(['cities', 'countries'])
+    ->where(['and', ['=', 'cities.id', 1], ['=', 'countries.id', 1]])
+    ->getText();
 
 
 $request = new Request();
