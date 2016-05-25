@@ -40,6 +40,11 @@ class Query
      */
     protected $skip;
 
+    /**
+     * @var string[]
+     */
+    protected $group = [];
+
     public function select($columnNames = '*') //в скобках дефолтный параметр
     {
         if (is_string($columnNames)) { //делает массив если строка
@@ -88,7 +93,9 @@ class Query
             $limitBlock = ' limit ' . $this->skip . ', ' . $limit;
         }
 
-        return $selectBlock . $fromBlock . $joinBlock . $whereBlock . $limitBlock;
+        $groupBlock = $this->group ? ' group by ' . join(', ', array_map(['Database', 'escapeName'], $this->group)) : ''; //Database::escapeName
+
+        return $selectBlock . $fromBlock . $joinBlock . $whereBlock . $groupBlock . $limitBlock;
     }
 
     /**
@@ -181,6 +188,20 @@ class Query
             throw new InvalidArgumentException('Неверный формат данных');
         }
         $this->skip = (int)$skip;
+
+        return $this;
+    }
+
+    /**
+     * @param $columnNames string[]|string
+     * @return $this
+     */
+    public function group($columnNames)
+    {
+        if (is_string($columnNames)) {
+            $columnNames = [$columnNames];
+        }
+        $this->group = $columnNames;
 
         return $this;
     }
