@@ -23,7 +23,8 @@ print_r($query
     ->select(['cities.name as City', 'countries.name as Country'])
     ->from('cities')
     ->join('countries', ['=', 'countries.id', new DatabaseFieldExpression('cities.countryId')])
-    ->where(['=', 'cities.name', 'Москва'])
+    ->limit(2)
+    ->skip(1)
     ->getRows()
 );
 exit;

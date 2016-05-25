@@ -30,6 +30,16 @@ class Query
      */
     protected $join = [];
 
+    /**
+     * @var int
+     */
+    protected $limit;
+
+    /**
+     * @var int
+     */
+    protected $skip;
+
     public function select($columnNames = '*') //в скобках дефолтный параметр
     {
         if (is_string($columnNames)) { //делает массив если строка
@@ -63,12 +73,22 @@ class Query
 
     public function getText()
     {
-        return 'select ' . join(', ', $this->select)
-            . ' from ' . join(', ', $this->from)
-            . join('', array_map(function ($array) {
-                return ' join ' . $this->escapeAliasedName($array[0]) . ' on ' . $this->formatCondition($array[1]);
-            }, $this->join))
-            . ' where ' . $this->formatCondition($this->where);
+        $selectBlock = 'select ' . join(', ', $this->select);
+        $fromBlock = $this->from ? ' from ' . join(', ', $this->from) : '';
+        $joinBlock = join('', array_map(function ($array) {
+            return ' join ' . $this->escapeAliasedName($array[0]) . ' on ' . $this->formatCondition($array[1]);
+        }, $this->join));
+        $whereBlock = $this->where ? ' where ' . $this->formatCondition($this->where) : '';
+
+        $limitBlock = '';
+        if (isset($this->limit) && is_null($this->skip)) {
+            $limitBlock = ' limit ' . $this->limit;
+        } elseif (isset($this->skip)) {
+            $limit = isset($this->limit) ? $this->limit : 4294967295; //4294967295 предположительно, максимальное к-во строк в таблице
+            $limitBlock = ' limit ' . $this->skip . ', ' . $limit;
+        }
+
+        return $selectBlock . $fromBlock . $joinBlock . $whereBlock . $limitBlock;
     }
 
     /**
@@ -133,6 +153,34 @@ class Query
     public function join($tableName, $condition)
     {
         $this->join[] = [$tableName, $condition];
+
+        return $this;
+    }
+
+    /**
+     * @param $limit int|float|string число возвращаемых рядов
+     * @return $this
+     */
+    public function limit($limit) //первая часть Limit,  rows
+    {
+        if (!is_numeric($limit)) {
+            throw new InvalidArgumentException('Неверный формат данных');
+        }
+        $this->limit = (int)$limit;
+
+        return $this;
+    }
+
+    /**
+     * @param $skip int|float|string число возвращаемых рядов
+     * @return $this
+     */
+    public function skip($skip) //2я часть Limit, offset
+    {
+        if (!is_numeric($skip)) {
+            throw new InvalidArgumentException('Неверный формат данных');
+        }
+        $this->skip = (int)$skip;
 
         return $this;
     }
