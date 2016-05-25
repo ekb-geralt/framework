@@ -25,6 +25,11 @@ class Query
      */
     protected $where;
 
+    /**
+     * @var array[]
+     */
+    protected $join = [];
+
     public function select($columnNames = '*') //в скобках дефолтный параметр
     {
         if (is_string($columnNames)) { //делает массив если строка
@@ -39,33 +44,6 @@ class Query
         $this->select = $columnNames;
 
         return $this;
-    }
-
-    /**
-     * @param $name string неэкранированная часть имени
-     * @return string экранированная часть имени
-     */
-    protected function escapePartialName($name)
-    {
-        if ($name !== '*') {
-            $name = str_replace('`', '``', $name);
-            $name = '`' . $name . '`';
-        }
-
-        return $name;
-    }
-
-    /**
-     * @param $name string неэкранированное имя
-     * @return string экранированное имя
-     */
-    protected function escapeName($name)
-    {
-        $names = explode('.', $name);
-        $names = array_map([$this, 'escapePartialName'], $names); // [$this, 'escapePartialName'] - один из синтаксисов callable(типа данных), а нужене он потому что синтаксис аррей мапа
-        $names = join('.', $names);
-
-        return $names;
     }
 
     public function from($tableNames)
@@ -87,6 +65,9 @@ class Query
     {
         return 'select ' . join(', ', $this->select)
             . ' from ' . join(', ', $this->from)
+            . join('', array_map(function ($array) {
+                return ' join ' . $this->escapeAliasedName($array[0]) . ' on ' . $this->formatCondition($array[1]);
+            }, $this->join))
             . ' where ' . $this->formatCondition($this->where);
     }
 
@@ -104,9 +85,9 @@ class Query
         }); //каждый элемент из первого массива посылает как первый аргумент в функцию, поэтому в part есть значение
         $count = count($parts);
         if ($count == 1) {
-            $name = $this->escapeName($parts[0]);
+            $name = Database::escapeName($parts[0]); //запуск статического метода
         } elseif ($count == 2) {
-            $name = $this->escapeName($parts[0]) . ' as ' . $this->escapeName($parts[1]);
+            $name = Database::escapeName($parts[0]) . ' as ' . Database::escapeName($parts[1]);
         } else {
             throw new Exception('Неправильный формат имени таблицы');
         }
@@ -123,7 +104,10 @@ class Query
     {
         switch ($condition[0]) {
             case '=':
-                return $this->escapeName($condition[1]) . ' = ' . $this->database->connection->real_escape_string($condition[2]);
+                $second = $condition[2] instanceof DatabaseExpression
+                    ? $condition[2]->getEscapedValue()
+                    : ('\'' . $this->database->connection->real_escape_string($condition[2]) . '\''); //кавычки экранируются \
+                return Database::escapeName($condition[1]) . ' = ' . $second;
             case 'and':
                 return join(' and ', array_map([$this, 'formatCondition'], array_slice($condition, 1)));
         }
@@ -134,6 +118,21 @@ class Query
     public function where($condition) //condition - условие
     {
         $this->where = $condition;
+
+        return $this;
+    }
+
+    public function getRows()
+    {
+        $query = $this->getText();
+        $result = $this->database->sendQuery($query);
+
+        return $result;
+    }
+
+    public function join($tableName, $condition)
+    {
+        $this->join[] = [$tableName, $condition];
 
         return $this;
     }

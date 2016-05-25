@@ -45,4 +45,31 @@ class Database
             return $rows;
         }
     }
+
+    /**
+     * @param $name string неэкранированная часть имени
+     * @return string экранированная часть имени
+     */
+    static function escapePartialName($name)
+    {
+        if ($name !== '*') {
+            $name = str_replace('`', '``', $name);
+            $name = '`' . $name . '`';
+        }
+
+        return $name;
+    }
+
+    /**
+     * @param $name string неэкранированное имя
+     * @return string экранированное имя
+     */
+    static function escapeName($name)
+    {
+        $names = explode('.', $name);
+        $names = array_map(['Database', 'escapePartialName'], $names); // [$this, 'escapePartialName'] - один из синтаксисов callable(типа данных), а нужене он потому что синтаксис аррей мапа
+        $names = join('.', $names);
+
+        return $names;
+    }
 }

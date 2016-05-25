@@ -19,12 +19,14 @@ $database->connect('Buncha.ru', 'root', 'pi31415', 'Geralt');
 //$queryData = $database->sendQuery('SELECT * FROM cities`LEFT JOIN countries ON cities.countryId = countries.id');
 //print_r($queryData);
 $query = new Query($database);
-echo $query
+print_r($query
     ->select(['cities.name as City', 'countries.name as Country'])
-    ->from(['cities', 'countries'])
-    ->where(['and', ['=', 'cities.id', 1], ['=', 'countries.id', 1]])
-    ->getText();
-
+    ->from('cities')
+    ->join('countries', ['=', 'countries.id', new DatabaseFieldExpression('cities.countryId')])
+    ->where(['=', 'cities.name', 'Москва'])
+    ->getRows()
+);
+exit;
 
 $request = new Request();
 $urlManager = new UrlManager();
