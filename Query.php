@@ -45,6 +45,11 @@ class Query
      */
     protected $group = [];
 
+    /**
+     * @var array
+     */
+    protected $order = [];
+
     public function select($columnNames = '*') //в скобках дефолтный параметр
     {
         if (is_string($columnNames)) { //делает массив если строка
@@ -93,9 +98,28 @@ class Query
             $limitBlock = ' limit ' . $this->skip . ', ' . $limit;
         }
 
-        $groupBlock = $this->group ? ' group by ' . join(', ', array_map(['Database', 'escapeName'], $this->group)) : ''; //Database::escapeName
+        $groupBlock = $this->group ? ' group by ' . join(', ', array_map([Database::class, 'escapeName'], $this->group)) : ''; //Database::escapeName, Database::class хранит в себе полное имя класса датабейс
 
-        return $selectBlock . $fromBlock . $joinBlock . $whereBlock . $groupBlock . $limitBlock;
+        $orderBlock = $this->order ? ' order by ' . join(', ', array_map([static::class, 'getOrderRuleText'], $this->order)) : '';
+
+        return $selectBlock . $fromBlock . $joinBlock . $whereBlock . $groupBlock . $orderBlock . $limitBlock;
+    }
+
+    /**
+     * @param $rule array
+     * @return string
+     */
+    public static function getOrderRuleText($rule)
+    {
+        if (is_array($rule)) {
+            $direction = $rule[1];
+            $columnName = Database::escapeAnyName($rule[0]);
+        } else {
+            $direction = 'ASC';
+            $columnName = Database::escapeAnyName($rule);
+        }
+
+        return $columnName . ' ' . $direction;
     }
 
     /**
@@ -202,6 +226,17 @@ class Query
             $columnNames = [$columnNames];
         }
         $this->group = $columnNames;
+
+        return $this;
+    }
+
+    /**
+     * @param $rules array
+     * @return $this
+     */
+    public function order($rules)
+    {
+        $this->order = $rules;
 
         return $this;
     }

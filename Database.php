@@ -72,4 +72,15 @@ class Database
 
         return $names;
     }
+
+    /**
+     * @param $name string|DatabaseExpression
+     * @return string
+     */
+    public static function escapeAnyName($name)
+    {
+        return $name instanceof DatabaseExpression
+            ? $name->getEscapedValue()
+            : static::escapeName($name);
+    }
 }

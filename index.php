@@ -24,6 +24,7 @@ print_r($query
     ->from('cities')
     ->join('countries', ['=', 'countries.id', new DatabaseFieldExpression('cities.countryId')])
     ->group(['Country', 'isCapital'])
+    ->order(['Country'])
     ->getRows()
 );
 exit;
