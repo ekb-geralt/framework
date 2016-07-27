@@ -20,8 +20,13 @@ class Application
     public $autoloader;
 
     /**
+     * @var Database
+     */
+    public $db;
+
+    /**
      * @param null $controllerName
-     * @return DemoController
+     * @return Controller
      * @throws Exception
      */
     public function getController($controllerName = null)

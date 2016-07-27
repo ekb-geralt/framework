@@ -50,6 +50,11 @@ class Query
      */
     protected $order = [];
 
+    public function __construct($database) //метод конструктор, запускается при создании объекта класса, выполняется на нем же. Теперь Квери знает с какой БД работает. Это надо для мскули ескапе стринг
+    {
+        $this->database = $database;
+    }
+
     public function select($columnNames = '*') //в скобках дефолтный параметр
     {
         if (is_string($columnNames)) { //делает массив если строка
@@ -144,11 +149,6 @@ class Query
         }
 
         return $name;
-    }
-
-    public function __construct($database) //метод конструктор, запускается при создании объекта класса, выполняется на нем же. Теперь Квери знает с какой БД работает. Это надо для мскули ескапе стринг
-    {
-        $this->database = $database;
     }
 
     protected function formatCondition($condition)

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Guest
- * Date: 23.03.2016
- * Time: 23:15
- */
 /** @var string[] $numbers */ //указывает что numbers - массив строк
 /** @var string[] $errors */
 ?>
