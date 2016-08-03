@@ -4,5 +4,10 @@
  */
 
 foreach ($cities as $city) {
-    echo $city['name'] . '<br>';
+    ?>
+    <a href="/city/show?id=<?= $city['id'] ?>">
+        <?= $city['name'] ?>
+    </a>
+    <br>
+    <?php
 }

@@ -151,7 +151,7 @@ class Query
         return $name;
     }
 
-    protected function formatCondition($condition)
+    protected function formatCondition($condition) // [=, operand, {operand}] обратная польская нотация, оператор, в зав-ти от него операнды
     {
         switch ($condition[0]) {
             case '=':
@@ -179,6 +179,16 @@ class Query
         $result = $this->database->sendQuery($query);
 
         return $result;
+    }
+
+    public function getRow()
+    {
+        $rows = $this->getRows();
+        if (!$rows) {
+            return null;
+        }
+
+        return array_values($rows)[0]; // array_values берет массив из rows, в котором один нужный элемент может лежать под любым ключом и каждый элемент массива getRows по очереди кладет в свой массив под ключами по порядку, т.о. единственный элемент всегда будет под ключом 0
     }
 
     public function join($tableName, $condition)

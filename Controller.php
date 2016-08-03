@@ -35,13 +35,13 @@ abstract class Controller //с abstract запрещается создание 
         return $controllerName;
     }
 
-    public function render($viewName, $data = [])
+    public function render($viewName, $params = [])
     {
         $__fileName = 'views/' . $this->getName() . '/' . $viewName . '.php'; //сделно через __имя, чтобы избежать прихода аналогичного имени из data
         if (!file_exists($__fileName)) {
             throw new Exception('Нет такого представления.'); // представление - вьюха
         }
-        extract($data);
+        extract($params);
 
         include $__fileName;
     }
