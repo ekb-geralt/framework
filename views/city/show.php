@@ -17,3 +17,4 @@
 <?= 100 * $city['unemploymentRate'] ?>%<br>
 Страна:
 <?= $city['countryId'] ?><br>
+<a href="/city/list">К списку</a>
