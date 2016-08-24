@@ -4,17 +4,17 @@
  */
 ?>
 Номер в списке:
-<?= $city['id'] ?><br>
+<?= htmlspecialchars($city['id']) ?><br>
 Название города:
-<?= $city['name'] ?><br>
+<?= htmlspecialchars($city['name']) ?><br>
 Численность населения:
-<?= $city['population'] ?><br>
+<?= htmlspecialchars($city['population']) ?><br>
 Является ли столицей?
-<?= $city['isCapital'] ? 'Да' : 'Нет'?><br>
+<?= $city['isCapital'] ? 'Да' : 'Нет' ?><br>
 Дата основания:
-<?= $city['creationDate'] ?><br>
+<?= htmlspecialchars($city['creationDate']) ?><br>
 Уровень безработицы:
 <?= 100 * $city['unemploymentRate'] ?>%<br>
 Страна:
-<?= $city['countryId'] ?><br>
+<?= htmlspecialchars($city['countryId']) ?><br>
 <a href="/city/list">К списку</a>
