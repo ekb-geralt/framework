@@ -16,5 +16,7 @@
 Уровень безработицы:
 <?= 100 * $city['unemploymentRate'] ?>%<br>
 Страна:
-<?= htmlspecialchars($city['countryId']) ?><br>
+<?= htmlspecialchars($city['countryName']) ?><br>
 <a href="/city/list">К списку</a>
+
+<?php //var_dump($city); ?>
