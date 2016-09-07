@@ -55,6 +55,17 @@ class Query
      */
     protected $order = [];
 
+    /**
+     * @var array
+     */
+    protected $joinTypeMap = [
+        self::JOIN_INTERNAL_INNER => 'INNER',
+        self::JOIN_INTERNAL_LEFT => 'LEFT',
+    ];
+
+    const JOIN_INTERNAL_INNER = 'inner';
+    const JOIN_INTERNAL_LEFT = 'left';
+
     public function __construct($database) //метод конструктор, запускается при создании объекта класса, выполняется на нем же. Теперь Квери знает с какой БД работает. Это надо для мскули ескапе стринг
     {
         $this->database = $database;
@@ -95,12 +106,14 @@ class Query
     {
         $selectBlock = 'select ' . join(', ', $this->select);
         $fromBlock = $this->from ? ' from ' . join(', ', $this->from) : '';
-        $joinBlock = join('', array_map(function ($array) {
-            return ' join ' . $this->escapeAliasedName($array[0]) . ' on ' . $this->formatCondition($array[1]);
+
+        $joinBlock = join('', array_map(function ($joinRule) {
+            $internalType = $joinRule[2];
+            $externalType = $this->joinTypeMap[$internalType];
+
+            return ' ' . $externalType . ' join ' . $this->escapeAliasedName($joinRule[0]) . ' on ' . $this->formatCondition($joinRule[1]);
         }, $this->join));
-        $leftJoinBlock = join('', array_map(function ($array) {
-            return 'left join ' . $this->escapeAliasedName($array[0]) . ' on ' . $this->formatCondition($array[1]);
-        }, $this->leftJoin));
+
         $whereBlock = $this->where ? ' where ' . $this->formatCondition($this->where) : '';
 
         $limitBlock = '';
@@ -115,7 +128,7 @@ class Query
 
         $orderBlock = $this->order ? ' order by ' . join(', ', array_map([static::class, 'getOrderRuleText'], $this->order)) : '';
 
-        return $selectBlock . $fromBlock . $joinBlock . $leftJoinBlock . $whereBlock . $groupBlock . $orderBlock . $limitBlock;
+        return $selectBlock . $fromBlock . $joinBlock . $whereBlock . $groupBlock . $orderBlock . $limitBlock;
     }
 
     /**
@@ -201,14 +214,14 @@ class Query
 
     public function join($tableName, $condition)
     {
-        $this->join[] = [$tableName, $condition];
+        $this->join[] = [$tableName, $condition, self::JOIN_INTERNAL_INNER];
 
         return $this;
     }
 
     public function leftJoin($tableName, $condition)
     {
-        $this->leftJoin[] = [$tableName, $condition];
+        $this->join[] = [$tableName, $condition, self::JOIN_INTERNAL_LEFT];
 
         return $this;
     }
