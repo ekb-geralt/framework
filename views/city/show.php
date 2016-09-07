@@ -12,7 +12,10 @@
 Является ли столицей?
 <?= $city['isCapital'] ? 'Да' : 'Нет' ?><br>
 Дата основания:
-<?= htmlspecialchars($city['creationDate']) ?><br>
+<?php
+$creationDate = strtotime(htmlspecialchars($city['creationDate']));
+if (!$creationDate == '') {echo date('d.m.o', $creationDate);} else {echo 'Не указана';}
+?><br>
 Уровень безработицы:
 <?= 100 * $city['unemploymentRate'] ?>%<br>
 Страна:

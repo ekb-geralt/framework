@@ -14,3 +14,4 @@
 <? } elseif (isset($numbers)) { ?>
     <?= join(' ', $numbers) ?>
 <? } ?>
+<br> <a href="/">На глагне</a>

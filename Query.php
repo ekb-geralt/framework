@@ -31,6 +31,11 @@ class Query
     protected $join = [];
 
     /**
+     * @var array[]
+     */
+    protected $leftJoin = [];
+
+    /**
      * @var int
      */
     protected $limit;
@@ -93,6 +98,9 @@ class Query
         $joinBlock = join('', array_map(function ($array) {
             return ' join ' . $this->escapeAliasedName($array[0]) . ' on ' . $this->formatCondition($array[1]);
         }, $this->join));
+        $leftJoinBlock = join('', array_map(function ($array) {
+            return 'left join ' . $this->escapeAliasedName($array[0]) . ' on ' . $this->formatCondition($array[1]);
+        }, $this->leftJoin));
         $whereBlock = $this->where ? ' where ' . $this->formatCondition($this->where) : '';
 
         $limitBlock = '';
@@ -107,7 +115,7 @@ class Query
 
         $orderBlock = $this->order ? ' order by ' . join(', ', array_map([static::class, 'getOrderRuleText'], $this->order)) : '';
 
-        return $selectBlock . $fromBlock . $joinBlock . $whereBlock . $groupBlock . $orderBlock . $limitBlock;
+        return $selectBlock . $fromBlock . $joinBlock . $leftJoinBlock . $whereBlock . $groupBlock . $orderBlock . $limitBlock;
     }
 
     /**
@@ -194,6 +202,13 @@ class Query
     public function join($tableName, $condition)
     {
         $this->join[] = [$tableName, $condition];
+
+        return $this;
+    }
+
+    public function leftJoin($tableName, $condition)
+    {
+        $this->leftJoin[] = [$tableName, $condition];
 
         return $this;
     }
