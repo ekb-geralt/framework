@@ -37,7 +37,11 @@ class CountryController extends Controller
     public function getCountry($id)
     {
         $query = new Query($this->app->db);
-        $query->select(['countries.*', 'cities.id AS cityId', 'cities.name as cityName'])->from('countries')->leftJoin('cities',['=', 'countries.capitalId', new DatabaseFieldExpression('cities.id')])->where(['=', 'countries.id', $id]); //можно написать просто id, так как в выборке нет второго столбца с именем id
+        $query
+            ->select(['countries.*', 'cities.id AS cityId', 'cities.name as cityName'])
+            ->from('countries')
+            ->leftJoin('cities',['=', 'countries.capitalId', new DatabaseFieldExpression('cities.id')])
+            ->where(['=', 'countries.id', $id]); //можно написать просто id, так как в выборке нет второго столбца с именем id
         $country = $query->getRow();
         return $country;
     }

@@ -75,4 +75,38 @@ class CityController extends Controller
 
         return $city;
     }
+
+    public function addAction()
+    {
+        if (isset($_POST['submit'])) {
+            $name = $this->app->db->connection->real_escape_string($_POST['name']);
+            $population = $this->app->db->connection->real_escape_string($_POST['population']);
+            $countryId = $this->app->db->connection->real_escape_string($_POST['countryId']);
+            $this->app->db->sendQuery("INSERT cities SET name='$name', population='$population', countryId='$countryId'");
+
+            $newCityId = $this->app->db->connection->insert_id;
+            header('Location: /city/list?addedCityId=' . $newCityId);
+            exit;
+        }
+
+        $query = new Query($this->app->db);
+        $query->select(['name', 'id'])->from('countries');
+        $countries = $query->getRows();
+
+        $city = [
+            'id' => null, // в таблице стоит not null, но можно здесь так написать, т.к. в таблице же есть автоинкремент, нельзя пустую строку опять же из-за автоинкремента, т.к. пустая строка приведется к 0 и создастся город с ид = 0, а следующий раз 0 будет занят
+            'name' => '',
+            'population' => null,
+            'isCapital' => null,
+            'creationDate' => null,
+            'unemploymentRate' => null,
+            'countryId' => '', // здесь можно пустую строку
+        ];
+
+        $this->render('edit', [
+            'city' => $city,
+            'isSaved' => false, // потому что форму адд мы будем видеть только когда данные не сохранены, в другом случае будем видеть список городов
+            'countries' => $countries,
+        ]);
+    }
 }

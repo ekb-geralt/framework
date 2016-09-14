@@ -2,7 +2,15 @@
 /**
  * @var array[] $cities
  */
+?>
 
+<?php if (isset($_GET['addedCityId'])) { ?>
+    Город добавлен.<br>
+    <a href="/city/edit?id=<?= urlencode($_GET['addedCityId']) ?>">Редактировать созданный город</a><br>
+<?php } ?>
+
+<h4>Список городов:</h4>
+<?php
 foreach ($cities as $city) {
     ?>
     <a href="/city/show?id=<?= urlencode($city['id']) ?>"> <!-- этим экранировать адреса-->
@@ -11,4 +19,6 @@ foreach ($cities as $city) {
     <br>
     <?php
 }
-?> <br> <a href="/">На глагне</a> <?php
+?>
+<br> <a href="/city/add">Добавить город</a>
+<br> <a href="/">На глагне</a>

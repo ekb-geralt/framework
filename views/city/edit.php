@@ -5,14 +5,12 @@
  */
 ?>
 <form method="post">
-    <label for="name">Название</label> <br>
+    <label for="name">Название</label><br>
     <input name="name" value="<?= htmlspecialchars($city['name']) ?>" id="name"> <br> <!-- все выходные данные надо экранировать-->
-    <label for="population">Численность населения</label> <br>
-    <input name="population" value="<?= htmlspecialchars($city['population']) ?>" id="population"> <br>
-    <label for="countryId">Название страны</label>
-    <br>
+    <label for="population">Численность населения</label><br>
+    <input name="population" value="<?= htmlspecialchars($city['population']) ?>" id="population"><br>
+    <label for="countryId">Название страны</label><br>
     <select id="countryId" name="countryId">
-        <option disabled>Выберите страну</option>
         <?php foreach ($countries as $country) { ?>
             <option <?= $city['countryId'] == $country['id'] ? 'selected' : '' ?> value="<?= htmlspecialchars($country['id']) ?>"><?= htmlspecialchars($country['name']) ?></option>
         <?php } ?>
