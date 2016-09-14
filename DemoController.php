@@ -42,6 +42,7 @@ class DemoController extends Controller
         ?>
         <br> <a href="/city/list">К списку городов</a>
         <br> <a href="/demo/sort">К сортировке чисел</a>
+        <br> <a href="/country/list">К списку стран</a>
         <?php
     }
 }
