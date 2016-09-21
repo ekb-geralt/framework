@@ -38,7 +38,7 @@ class CityController extends Controller
         }
 
         $isSaved = false;
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['submit'])) { //в button это name=
             $name = $this->app->db->connection->real_escape_string($_POST['name']);
             $id = $this->app->db->connection->real_escape_string($_GET['id']);
             $population = $this->app->db->connection->real_escape_string($_POST['population']);
@@ -84,8 +84,13 @@ class CityController extends Controller
             $countryId = $this->app->db->connection->real_escape_string($_POST['countryId']);
             $this->app->db->sendQuery("INSERT cities SET name='$name', population='$population', countryId='$countryId'");
 
-            $newCityId = $this->app->db->connection->insert_id;
-            header('Location: /city/list?addedCityId=' . $newCityId);
+            $newCityId = $this->app->db->connection->insert_id; // вставка последнего переданного id или как-то так
+            $this->app->flashMessages->add('
+                Город добавлен.<br>
+                <a href="/city/edit?id=' . urlencode($newCityId) . '">Редактировать созданный город</a>
+            '); // здесь текстовое сообщение, которое по умолчанию html, оно содержится в ''
+            header('Location: /city/list');
+
             exit;
         }
 
@@ -107,6 +112,32 @@ class CityController extends Controller
             'city' => $city,
             'isSaved' => false, // потому что форму адд мы будем видеть только когда данные не сохранены, в другом случае будем видеть список городов
             'countries' => $countries,
+        ]);
+    }
+
+    public function deleteAction()
+    {
+        $id = $_GET['id'];
+        $city = $this->getCity($id);
+        if (!$city) {
+            throw new Exception('Нет города с таким id');
+        }
+        if (isset($_POST['yes'])) {
+            $escapedId = $this->app->db->connection->real_escape_string($id); //экранируем именно здесь, потому, что именно здесь нужно экранированное имя, а раньше было не нужно
+            $this->app->db->sendQuery("DELETE FROM cities WHERE id='$escapedId'");//запрос и переадресация
+            
+            $deletedCityName = $city['name'];
+            header('Location: /city/list?deletedCityName=' . urlencode($deletedCityName));
+            
+            exit;
+        } elseif (isset($_POST['no'])) {
+            header('Location: /city/list');
+
+            exit;
+        }
+        
+        $this->render('delete',[
+            'city' => $city,
         ]);
     }
 }

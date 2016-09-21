@@ -25,6 +25,16 @@ class Application
     public $db;
 
     /**
+     * @var Session
+     */
+    public $session;
+
+    /**
+     * @var FlashMessages
+     */
+    public $flashMessages;
+
+    /**
      * @param null $controllerName
      * @return Controller
      * @throws Exception
