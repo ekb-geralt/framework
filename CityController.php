@@ -125,9 +125,9 @@ class CityController extends Controller
         if (isset($_POST['yes'])) {
             $escapedId = $this->app->db->connection->real_escape_string($id); //экранируем именно здесь, потому, что именно здесь нужно экранированное имя, а раньше было не нужно
             $this->app->db->sendQuery("DELETE FROM cities WHERE id='$escapedId'");//запрос и переадресация
-            
-            $deletedCityName = $city['name'];
-            header('Location: /city/list?deletedCityName=' . urlencode($deletedCityName));
+
+            $this->app->flashMessages->add('Город ' . $city['name'] . ' удален.');
+            header('Location: /city/list');
             
             exit;
         } elseif (isset($_POST['no'])) {

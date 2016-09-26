@@ -5,15 +5,7 @@
  */
 ?>
 
-<?php if ($messages = $this->app->flashMessages->getAll()) { ?>
-    <?php foreach ($messages as $message) { ?>
-        <?= $message ?> <br>
-    <?php } ?>
-<?php } ?>
 
-<?php if (isset($_GET['deletedCityName'])) { ?>
-    Город <?= $_GET['deletedCityName'] ?> удален.<br>
-<?php } ?>
 
 <h4>Список городов:</h4>
 <?php foreach ($cities as $city) { ?>
