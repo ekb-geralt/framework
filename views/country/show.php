@@ -14,5 +14,3 @@
 Площадь:
 <?= $country['area'] ?><br>
 <a href="/country/list">К списку</a>
-
-<?php //var_dump($city); ?>

@@ -5,4 +5,4 @@ foreach ($countries as $country) {
         <?= htmlspecialchars($country['name']) ?> <br>
     <?php
 }
-?> <br> <a href="/">На глагне</a>
+?>

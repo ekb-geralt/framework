@@ -21,5 +21,3 @@ if ($creationDate != '') {echo date('d.m.o', $creationDate);} else {echo 'Не �
 Страна:
 <?= htmlspecialchars($city['countryName']) ?><br>
 <a href="/city/list">К списку</a>
-
-<?php //var_dump($city); ?>

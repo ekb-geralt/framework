@@ -66,6 +66,10 @@ class Query
     const JOIN_INTERNAL_INNER = 'inner';
     const JOIN_INTERNAL_LEFT = 'left';
 
+    /**
+     * Query constructor.
+     * @param $database Database
+     */
     public function __construct($database) //метод конструктор, запускается при создании объекта класса, выполняется на нем же. Теперь Квери знает с какой БД работает. Это надо для мскули ескапе стринг
     {
         $this->database = $database;
@@ -202,7 +206,7 @@ class Query
         return $result;
     }
 
-    public function getRow()
+    public function getRow() //возвращает первый ряд
     {
         $rows = $this->getRows();
         if (!$rows) {

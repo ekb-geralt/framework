@@ -7,11 +7,9 @@
     <br>
     <button type="submit">Send</button>
 </form>
-<hr>
 <? if ($errors) { ?>
     Произошли следующие ошибки: <br>
     <?= join('<br>', $errors) ?>
 <? } elseif (isset($numbers)) { ?>
     <?= join(' ', $numbers) ?>
 <? } ?>
-<br> <a href="/">На глагне</a>
