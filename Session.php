@@ -14,13 +14,23 @@ class Session
 
     public function __get($name)
     {
-        $value = $_SESSION[$name];
+        if (!isset($_SESSION[$name])) {
+            
+            return null;
+        } else {
 
-        return $value;
+            return $_SESSION[$name];
+        }
     }
 
     public function __isset($name)
     {
+        
         return isset($_SESSION[$name]);
+    }
+
+    public function __unset($name)
+    {
+        unset($_SESSION[$name]);
     }
 }

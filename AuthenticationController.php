@@ -12,12 +12,13 @@ class AuthenticationController extends Controller
             if (isset($user)) {
                 //$this->app->session->__set('username', $usrName); - делает то же, что и строчка внизу
                 $this->app->session->isUserLoggedIn = true;
-                $this->app->session->loggedInUserName = $usrName;
+                $this->app->session->loggedInUserId = $user['id'];
+                $this->app->flashMessages->add('Добро пожаловать, ' . $usrName . '!');
                 header('Location: /');
 
                 exit;
             } else {
-                $this->app->flashMessages->add('Нет такого пользователя');
+                $this->app->flashMessages->add('Нет такого пользователя.');
             }
         }
 
@@ -26,6 +27,15 @@ class AuthenticationController extends Controller
 
     public function logoutAction()
     {
+        if ($this->app->session->isUserLoggedIn) {
+            $this->app->session->isUserLoggedIn = false;
+            unset($this->app->session->loggedInUserId);
+            $this->app->flashMessages->add('Вы разлогинены.');
+        } else {
+            $this->app->flashMessages->add('Вы не залогинены.');
+        }
+        header('Location: /');
 
+        exit;
     }
 }

@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Created by PhpStorm.
- * User: Guest
- * Date: 17.03.2016
- * Time: 0:49
- */
 class DemoController extends Controller
 {
     public $defaultActionName = 'hello'; //перегрузили значение свойства Controller::$defaultActionName
@@ -38,11 +31,8 @@ class DemoController extends Controller
 
     public function helloAction()
     {
-        echo 'Hello, World!';
-        ?>
-        <br> <a href="/city/list">К списку городов</a>
-        <br> <a href="/demo/sort">К сортировке чисел</a>
-        <br> <a href="/country/list">К списку стран</a>
-        <?php
+        $message = 'Hello, World!';
+        
+        $this->render('hello', ['message' => $message]);
     }
 }

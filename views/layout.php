@@ -1,5 +1,13 @@
-<a href="/authentication/login">Войти</a> | <a href="/city/list">К списку городов</a> | <a href="/demo/sort">К сортировке чисел</a> | <a href="/country/list">К списку стран</a> | <a href="/">На главную</a><hr>
-
+<?php
+/**
+ * @var $this Controller
+ */
+?>
+|| <?= $this->renderViewOnly('userPanel') ?> ||
+<a href="/">На главную</a> |
+<a href="/city/list">К списку городов</a> |
+<a href="/demo/sort">К сортировке чисел</a> |
+<a href="/country/list">К списку стран</a> |<hr>
 
 <?= $content ?><br>
 

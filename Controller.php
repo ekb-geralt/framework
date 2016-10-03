@@ -35,21 +35,21 @@ abstract class Controller //с abstract запрещается создание 
         return $controllerName;
     }
 
-    public function render($localViewName, $params = [])
+    public function render($localViewName, $variables = [])
     {
         $globalViewName = $this->getName() . '/' . $localViewName;
-        $layoutContent = $this->renderViewOnly($globalViewName, $params); //передаем params насквозь, т.к. интерфейс совместимый
+        $layoutContent = $this->renderViewOnly($globalViewName, $variables); //передаем params насквозь, т.к. интерфейс совместимый
 
         echo $this->renderViewOnly('layout', ['content' => $layoutContent]);
     }
 
-    public function renderViewOnly($globalViewName, $params = [])
+    public function renderViewOnly($globalViewName, $variables = [])
     {
         $__fileName = 'views/' . $globalViewName . '.php';
         if (!file_exists($__fileName)) {
             throw new Exception('Нет такого представления.'); // представление - вьюха
         }
-        extract($params);
+        extract($variables);
         ob_start();
         include $__fileName;
 
