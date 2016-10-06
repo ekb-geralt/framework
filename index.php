@@ -18,6 +18,7 @@ $database = new Database();
 $database->connect('Buncha.ru', 'root', 'pi31415', 'Geralt');
 $session = new Session();
 $flashMessages = new FlashMessages($session);
+$user = new User($session, $database);
 
 $request = new Request();
 $urlManager = new UrlManager();
@@ -28,5 +29,6 @@ $application->autoloader = $autoloader;
 $application->db = $database;
 $application->session = $session;
 $application->flashMessages = $flashMessages;
+$application->user = $user;
 $controller = $application->getController($route->controllerName);
 $controller->execute($route->actionName);

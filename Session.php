@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Session
+ */
 class Session
 {
     function __construct()

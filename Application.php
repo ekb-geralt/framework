@@ -35,6 +35,11 @@ class Application
     public $flashMessages;
 
     /**
+     * @var User
+     */
+    public $user;
+
+    /**
      * @param null $controllerName
      * @return Controller
      * @throws Exception
