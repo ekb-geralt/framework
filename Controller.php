@@ -38,7 +38,7 @@ abstract class Controller //с abstract запрещается создание 
     public function render($localViewName, $variables = [])
     {
         $globalViewName = $this->getName() . '/' . $localViewName;
-        $layoutContent = $this->renderViewOnly($globalViewName, $variables); //передаем params насквозь, т.к. интерфейс совместимый
+        $layoutContent = $this->renderViewOnly($globalViewName, $variables); //передаем variables насквозь, т.к. интерфейс совместимый
 
         echo $this->renderViewOnly('layout', ['content' => $layoutContent]);
     }

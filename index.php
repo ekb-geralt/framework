@@ -10,6 +10,7 @@
 //framework.local(название сайта)/news(название контроллера-модуль отвечающий за работу с определенными однотипными данными, в данном случае - с новостями)/list(экшен)?sort=date(параметры)
 ini_set('display_errors',  '1');
 header('Content-Type: text/html; charset=utf-8');
+define('PROJECT_ROOT', __DIR__); //константа содержит путь до корня проекта
 require_once 'Autoloader.php';
 
 $autoloader = new Autoloader();

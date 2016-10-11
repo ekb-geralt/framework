@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $this Controller
+ * @var $this UserPanelWidget
  */
 ?>
 <?php if ($this->app->session->isUserLoggedIn) { ?>
