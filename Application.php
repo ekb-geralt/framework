@@ -39,6 +39,20 @@ class Application
      */
     public $user;
 
+    static private $instance;
+
+    /**
+     * @return static
+     */
+    public static function getInstance() //singletone подход, только 1 объект этого класса, сы не пришем нюь Аппликейшн, а используем Аппликейшн-инстанс и он возвращает уже существующий объект
+    {
+        if (!static::$instance) {
+            static::$instance = new static;
+        }
+
+        return static::$instance;
+    }
+
     /**
      * @param null $controllerName
      * @return Controller
