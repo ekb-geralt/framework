@@ -35,4 +35,11 @@ class DemoController extends Controller
         
         $this->render('hello', ['message' => $message]);
     }
+
+    public function testAction()
+    {
+        $city = City::getById(1);
+        $city->name = 'sdfsdf';
+        $city->save();
+    }
 }

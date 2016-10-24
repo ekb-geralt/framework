@@ -21,6 +21,11 @@ class User
     protected $userCache;
 
     /**
+     * @var array
+     */
+    protected $loggedInUser;
+
+    /**
      * User constructor.
      * @param Session $session
      * @param Database $database
@@ -34,7 +39,7 @@ class User
     /**
      * @return array|null
      */
-    public function getUser()
+    public function getUser() //один раз за запуск получает данные о залогиненном пользователе, потом они хранятся в кэше
     {
         if (!$this->userCache) {
             $query = new Query($this->database);
@@ -43,5 +48,21 @@ class User
         }
 
         return $this->userCache;
+    }
+
+    public function logIn($username, $password)
+    {
+        $query = new Query($this->database);
+        $query->select()->from('authentic')->where(['and', ['=', 'username', $username], ['=', 'password', md5($password)]]);
+        $user = $query->getRow();
+        if (isset($user)) {
+            $app = Application::getInstance();
+            $app->session->isUserLoggedIn = true;
+            $app->session->loggedInUserId = $user['id'];
+            
+            return $user;
+        } else {
+            return null;
+        }
     }
 }

@@ -3,8 +3,13 @@
 abstract class ActiveRecord
 {
     /**
+     * @var int
+     */
+    public $id;
+    
+    /**
      * @return string
-     * Âîçâðàùàåò ñòðîêó ñ èìåíåì òàáëèöû, ÷òîáû ActiveRecord ìîã ïîñòðîèòü çàïðîñû ê ñîîòâåòñòâóþùåé òàáëèöå
+     * Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ ÑÑ‚Ñ€Ð¾ÐºÑƒ Ñ Ð¸Ð¼ÐµÐ½ÐµÐ¼ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹, Ñ‡Ñ‚Ð¾Ð±Ñ‹ ActiveRecord Ð¼Ð¾Ð³ Ð¿Ð¾ÑÑ‚Ñ€Ð¾Ð¸Ñ‚ÑŒ Ð·Ð°Ð¿Ñ€Ð¾ÑÑ‹ Ðº ÑÐ¾Ð¾Ñ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÑƒÑŽÑ‰ÐµÐ¹ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ðµ
      */
     public static function getTableName()
     {
@@ -16,7 +21,7 @@ abstract class ActiveRecord
      * @param $limit
      * @return static[]
      */
-    public static function getObjects($condition = null, $limit = null) //static îò self îòëè÷àåòñÿ òåì, ÷òî static ññûëàåòñÿ íà òîò êëàññ, â êîòîðîì âûçâàí ìåòîä, à self - ãäå îáúÿâëåí ìåòîä
+    public static function getObjects($condition = null, $limit = null) //static Ð¾Ñ‚ self Ð¾Ñ‚Ð»Ð¸Ñ‡Ð°ÐµÑ‚ÑÑ Ñ‚ÐµÐ¼, Ñ‡Ñ‚Ð¾ static ÑÑÑ‹Ð»Ð°ÐµÑ‚ÑÑ Ð½Ð° Ñ‚Ð¾Ñ‚ ÐºÐ»Ð°ÑÑ, Ð² ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¼ Ð²Ñ‹Ð·Ð²Ð°Ð½ Ð¼ÐµÑ‚Ð¾Ð´, Ð° self - Ð³Ð´Ðµ Ð¾Ð±ÑŠÑÐ²Ð»ÐµÐ½ Ð¼ÐµÑ‚Ð¾Ð´
     {
         $objects = [];
         $query = new Query(Application::getInstance()->db);
@@ -30,11 +35,42 @@ abstract class ActiveRecord
         foreach ($query->getRows() as $row) {
             $object = new static;
             foreach ($row as $name => $value) {
-                $object->$name = $value; //object - ýòî îáúåêò, è àîæíî ïîñëå ñòðåëêè ïðîñòî íàïèñàòü ïåðåìåííóþ â êîòîðîé çíà÷åíèå, èëè íàïðÿìóþ èìÿ ñâîéñòâà, êîòîðîå áóäåò ó îáúåêòà
+                $object->$name = $value; //object - ÑÑ‚Ð¾ Ð¾Ð±ÑŠÐµÐºÑ‚, Ð¸ Ð°Ð¾Ð¶Ð½Ð¾ Ð¿Ð¾ÑÐ»Ðµ ÑÑ‚Ñ€ÐµÐ»ÐºÐ¸ Ð¿Ñ€Ð¾ÑÑ‚Ð¾ Ð½Ð°Ð¿Ð¸ÑÐ°Ñ‚ÑŒ Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½ÑƒÑŽ Ð² ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¹ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ, Ð¸Ð»Ð¸ Ð½Ð°Ð¿Ñ€ÑÐ¼ÑƒÑŽ Ð¸Ð¼Ñ ÑÐ²Ð¾Ð¹ÑÑ‚Ð²Ð°, ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ðµ Ð±ÑƒÐ´ÐµÑ‚ Ñƒ Ð¾Ð±ÑŠÐµÐºÑ‚Ð°
             }
-            $objects[] = $row;
+            $objects[] = $object;
         }
 
         return $objects;
+    }
+
+    /**
+     * @param $id int
+     * @return static|null
+     */
+    public static function getById($id)
+    {
+        $objects = static::getObjects(['=', 'id', $id], 1);
+        if ($objects) {
+            return array_shift($objects);
+        }
+        
+        return null;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function save()
+    {
+        $database = Application::getInstance()->db;
+        $fields = (array)$this; //Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÑÐ¿Ð¸ÑÐ¾Ðº Ð¿Ð¾Ð»ÐµÐ¹ Ð² Ð‘Ð”
+        $keys = array_keys($fields); //Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ ÐºÐ»ÑŽÑ‡Ð¸ Ð¸Ð· fields[] Ð² Ð²Ð¸Ð´Ðµ Ð½Ð¾Ð²Ð¾Ð³Ð¾ Ð¼Ð°ÑÑÐ¸Ð²Ð°, Ð³Ð´Ðµ Ð¾Ð½Ð¸ Ð±ÑƒÐ´ÑƒÑ‚ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸ÑÐ¼Ð¸
+        $values = array_values($fields);
+        $data = join(', ', array_map(function($key, $value) use ($database) { //array_map Ð² Ð´Ð°Ð½Ð½Ð¾Ð¼ ÑÐ»ÑƒÑ‡Ð°Ðµ ÑÐ´ÐµÐ»Ð°ÐµÑ‚ Ð¼Ð°ÑÑÐ¸Ð² Ð²Ð¸Ð´Ð° ÐºÐ»ÑŽÑ‡ = Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ, use Ð¿Ñ€Ð¾Ð±Ñ€Ð°ÑÑ‹Ð²Ð°ÐµÑ‚ $database Ð¸Ð· Ñ€Ð¾Ð´Ð¸Ñ‚ÐµÐ»ÑŒÑÐºÐ¾Ð¹ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ð² Ð±ÐµÐ·Ñ‹Ð¼ÑÐ½Ð½ÑƒÑŽ
+            return $database->escapeName($key) . " = '" . $database->connection->real_escape_string($value) . "'";
+        }, $keys, $values));
+        $id = $database->connection->real_escape_string($this->id);
+        $query = 'UPDATE ' . $database->escapeName($this->getTableName()) . ' SET ' . $data . ' WHERE id = ' . $id;
+        $database->sendQuery($query);
     }
 }
