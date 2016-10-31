@@ -19,5 +19,5 @@ if ($creationDate != '') {echo date('d.m.o', $creationDate);} else {echo 'Не �
 Уровень безработицы:
 <?= 100 * $city['unemploymentRate'] ?>%<br>
 Страна:
-<?= htmlspecialchars($city['countryName']) ?><br>
+<a href="/country/show?id=<?= urlencode($city['countryId']) ?>"><?= htmlspecialchars($city['countryName']) ?></a><br>
 <a href="/city/list">К списку</a>

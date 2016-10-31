@@ -7,8 +7,22 @@
 <form method="post">
     <label for="name">Название</label><br>
     <input name="name" value="<?= htmlspecialchars($city['name']) ?>" id="name"> <br> <!-- все выходные данные надо экранировать-->
+
     <label for="population">Численность населения</label><br>
     <input name="population" value="<?= htmlspecialchars($city['population']) ?>" id="population"><br>
+
+    <label for="isCapital">Является столицей</label><br>
+    <input name="isCapital" value="<?= htmlspecialchars($city['isCapital']) ?>" id="isCapital"><br>
+
+    <?php
+    $creationDate = is_null($city['creationDate']) ? '' : (new DateTime($city['creationDate']))->format('d.m.Y');
+    ?>
+    <label for="creationDate">Дата основания</label><br>
+    <input name="creationDate" value="<?= htmlspecialchars($creationDate) ?>" id="creationDate"><br>
+
+    <label for="unemploymentRate">Уровень безработицы</label><br>
+    <input name="unemploymentRate" value="<?= htmlspecialchars($city['unemploymentRate']) ?>" id="unemploymentRate"><br>
+
     <label for="countryId">Название страны</label><br>
     <select id="countryId" name="countryId">
         <?php foreach ($countries as $country) { ?>

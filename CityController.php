@@ -39,11 +39,19 @@ class CityController extends Controller
 
         $isSaved = false;
         if (isset($_POST['submit'])) { //в button это name=
-            $name = $this->app->db->connection->real_escape_string($_POST['name']);
-            $id = $this->app->db->connection->real_escape_string($_GET['id']);
-            $population = $this->app->db->connection->real_escape_string($_POST['population']);
-            $countryId = $this->app->db->connection->real_escape_string($_POST['countryId']);
-            $this->app->db->sendQuery("UPDATE cities SET name='$name', population='$population', countryId='$countryId' WHERE id='$id'");
+            $city = City::getById($_GET['id']);
+            $city->name = $_POST['name'];
+            $city->population = $_POST['population'];
+            $city->isCapital = $_POST['isCapital'];
+            if ($_POST['creationDate'] == '') {
+                $creationDate = null;
+            } else {
+                $creationDate = (new DateTime($_POST['creationDate']))->format('Y-m-d');
+            }
+            $city->creationDate = $creationDate;
+            $city->unemploymentRate = $_POST['unemploymentRate'];
+            $city->countryId = $_POST['countryId'];
+            $city->save();
             $isSaved = true;
         }
 
@@ -81,9 +89,12 @@ class CityController extends Controller
         if (isset($_POST['submit'])) {
             $name = $this->app->db->connection->real_escape_string($_POST['name']);
             $population = $this->app->db->connection->real_escape_string($_POST['population']);
+            $isCapital = $this->app->db->connection->real_escape_string($_POST['isCapital']);
+            $creationDate = $this->app->db->connection->real_escape_string($_POST['creationDate']);
+            $unemploymentRate = $this->app->db->connection->real_escape_string($_POST['unemploymentRate']);
             $countryId = $this->app->db->connection->real_escape_string($_POST['countryId']);
-            $this->app->db->sendQuery("INSERT cities SET name='$name', population='$population', countryId='$countryId'");
-
+            $this->app->db->sendQuery("INSERT cities SET name='$name', population='$population', isCapital = '$isCapital', creationDate = '$creationDate', unemploymentRate = '$unemploymentRate', countryId='$countryId'");
+            
             $newCityId = $this->app->db->connection->insert_id; // вставка последнего переданного id или как-то так
             $this->app->flashMessages->add('
                 Город добавлен.<br>

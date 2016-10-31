@@ -67,6 +67,7 @@ class Application
         if (!$this->autoloader->canLoad($className)) { //удостоверяемся в том, что такой класс существует
             throw new Exception('Нет такого контроллера');
         }
+        /** @var Controller $controller */
         $controller = new $className();
         $controller->app = $this; //связываем аппликейшн с контроллером для того чтобы конороллер он мог узнать в каком приложении он запущен и обратиться к другим модулям этого приложения
 

@@ -67,7 +67,13 @@ abstract class ActiveRecord
         $keys = array_keys($fields); //получаем ключи из fields[] в виде нового массива, где они будут значениями
         $values = array_values($fields);
         $data = join(', ', array_map(function($key, $value) use ($database) { //array_map в данном случае сделает массив вида ключ = значение, use пробрасывает $database из родительской функции в безымянную
-            return $database->escapeName($key) . " = '" . $database->connection->real_escape_string($value) . "'";
+            if (is_null($value)) {
+                $sqlValue = 'NULL';
+            } else {
+                $sqlValue = "'" . $database->connection->real_escape_string($value) . "'";
+            }
+            
+            return $database->escapeName($key) . ' = ' . $sqlValue;
         }, $keys, $values));
         $id = $database->connection->real_escape_string($this->id);
         $query = 'UPDATE ' . $database->escapeName($this->getTableName()) . ' SET ' . $data . ' WHERE id = ' . $id;
