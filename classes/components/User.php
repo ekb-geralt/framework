@@ -1,4 +1,7 @@
 <?php
+namespace components;
+use Application;
+use Query;
 
 /**
  * Class User

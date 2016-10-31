@@ -1,5 +1,7 @@
 <?php
-class AuthenticationController extends Controller
+namespace controllers;
+
+class AuthenticationController extends \Controller
 {
     public function loginAction()
     {
@@ -46,7 +48,7 @@ class AuthenticationController extends Controller
             $newPass = $_POST['newPass'];
             $newPassConfirm = $_POST['newPassConfirm'];
             $oldHashedPass = md5($_POST['oldPass']);
-            $query = new Query($this->app->db);
+            $query = new \Query($this->app->db);
             $query->select()->from('authentic')->where(['and', ['=', 'id', $this->app->session->loggedInUserId], ['=', 'password', $oldHashedPass]]);
             $user = $query->getRow();
             if ($newPass != $newPassConfirm) {

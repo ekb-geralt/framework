@@ -29,7 +29,8 @@ abstract class Controller //с abstract запрещается создание 
 
     public function getName()
     {
-        $className = get_class($this);
+        $className = get_class($this); //возвращает полное имя класса, а нужно короткое
+        $className = array_pop(explode('\\', $className));//разбиваем класснейм по \, получается массив, где последний элемент и есть короткое имя класса
         $controllerName = substr($className, 0, strrpos($className, 'Controller')); //проверить что счет совпадает, напр. сфбстр считает с 0, а стрпос точно ли с 0 считет, совпадают ли позиции, отсчитывать 5 символов включительно или исключительно
 
         return $controllerName;
@@ -43,6 +44,12 @@ abstract class Controller //с abstract запрещается создание 
         echo $this->renderViewOnly('layout', ['content' => $layoutContent]);
     }
 
+    /**
+     * @param string $globalViewName
+     * @param array $variables
+     * @return string
+     * @throws Exception
+     */
     public function renderViewOnly($globalViewName, $variables = [])
     {
         $__fileName = 'views/' . $globalViewName . '.php';

@@ -2,6 +2,7 @@
 /**
  * @var string[] $city
  * @var bool $isSaved
+ * @var string[] $countries
  */
 ?>
 <form method="post">

@@ -8,10 +8,18 @@
 //точка входа
 //include - для того файла, который что то делает, require_once для объявления
 //framework.local(название сайта)/news(название контроллера-модуль отвечающий за работу с определенными однотипными данными, в данном случае - с новостями)/list(экшен)?sort=date(параметры)
+use components\Autoloader;
+use components\Database;
+use components\FlashMessages;
+use components\Request;
+use components\Session;
+use components\UrlManager;
+use components\User;
+
 ini_set('display_errors',  '1');
 header('Content-Type: text/html; charset=utf-8');
 define('PROJECT_ROOT', __DIR__); //константа содержит путь до корня проекта
-require_once 'Autoloader.php';
+require_once 'classes/components/Autoloader.php';
 
 $autoloader = new Autoloader();
 $autoloader->register();

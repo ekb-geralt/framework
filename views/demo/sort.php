@@ -3,7 +3,7 @@
 /** @var string[] $errors */
 ?>
 <form method="post">
-    <textarea name="numbers"></textarea> <!-- имя текстареа - имя ячейки в post -->
+    <textarea name="numbers"></textarea> <!-- имя текстареа - имя ячейки в post --> <!-- чтобы не подсвечивалась текстареа надо добавить title(проще), лучше но сложнее label -->
     <br>
     <button type="submit">Send</button>
 </form>

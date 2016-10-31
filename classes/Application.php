@@ -1,4 +1,10 @@
 <?php
+use components\Autoloader;
+use components\Database;
+use components\FlashMessages;
+use components\Request;
+use components\Session;
+use components\User;
 
 /**
  * Created by PhpStorm.
@@ -63,7 +69,8 @@ class Application
         if (is_null($controllerName)) {
             $controllerName = $this->defaultControllerName;
         }
-        $className = ucfirst($controllerName) . 'Controller';
+        $className = 'controllers\\' . ucfirst($controllerName) . 'Controller';
+
         if (!$this->autoloader->canLoad($className)) { //удостоверяемся в том, что такой класс существует
             throw new Exception('Нет такого контроллера');
         }

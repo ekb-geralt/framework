@@ -1,4 +1,9 @@
 <?php
+namespace controllers;
+
+use City;
+use Controller;
+
 class DemoController extends Controller
 {
     public $defaultActionName = 'hello'; //перегрузили значение свойства Controller::$defaultActionName

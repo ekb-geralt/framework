@@ -1,6 +1,7 @@
 <?php
 /**
  * @var $this Controller
+ * @var $content string
  */
 ?>
 <a href="/">На главную</a> |

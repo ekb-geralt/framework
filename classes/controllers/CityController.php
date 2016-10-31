@@ -1,6 +1,12 @@
 <?php
+namespace controllers;
+use City;
+use DatabaseFieldExpression;
+use DateTime;
+use Exception;
+use Query;
 
-class CityController extends Controller
+class CityController extends \Controller
 {
     public $defaultActionName = 'list';
 

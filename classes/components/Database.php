@@ -1,4 +1,8 @@
 <?php
+namespace components;
+use DatabaseExpression;
+use Exception;
+use mysqli;
 
 /**
  * Created by PhpStorm.
@@ -67,7 +71,7 @@ class Database
     static function escapeName($name)
     {
         $names = explode('.', $name);
-        $names = array_map(['Database', 'escapePartialName'], $names); // [$this, 'escapePartialName'] - один из синтаксисов callable(типа данных), а нужене он потому что синтаксис аррей мапа
+        $names = array_map([static::class, 'escapePartialName'], $names); // [$this, 'escapePartialName'] - один из синтаксисов callable(типа данных), а нужен он потому что синтаксис аррей мапа
         $names = join('.', $names);
 
         return $names;

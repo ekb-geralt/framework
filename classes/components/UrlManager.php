@@ -1,4 +1,7 @@
 <?php
+namespace components;
+use Exception;
+use Route;
 
 /**
  * Created by PhpStorm.

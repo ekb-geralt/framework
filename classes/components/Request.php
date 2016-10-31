@@ -1,4 +1,5 @@
 <?php
+namespace components;
 
 /**
  * Created by PhpStorm.

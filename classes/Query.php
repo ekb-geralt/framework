@@ -1,4 +1,5 @@
 <?php
+use components\Database;
 
 /**
  * Created by PhpStorm.
