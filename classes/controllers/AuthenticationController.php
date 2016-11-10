@@ -1,6 +1,8 @@
 <?php
 namespace controllers;
 
+use Application;
+
 class AuthenticationController extends \Controller
 {
     public function loginAction()
@@ -38,34 +40,40 @@ class AuthenticationController extends \Controller
 
     public function changePassAction()
     {
-        if (!$this->app->session->isUserLoggedIn) {
-            $this->app->flashMessages->add('Залогиньтесь.');
+        if (!Application::getInstance()->session->isUserLoggedIn) {
+            Application::getInstance()->flashMessages->add('Залогиньтесь.');
             header('Location: /authentication/login');
-
             exit;
         }
         if (isset($_POST['submit'])) {
             $newPass = $_POST['newPass'];
             $newPassConfirm = $_POST['newPassConfirm'];
             $oldHashedPass = md5($_POST['oldPass']);
+
             $query = new \Query($this->app->db);
             $query->select()->from('authentic')->where(['and', ['=', 'id', $this->app->session->loggedInUserId], ['=', 'password', $oldHashedPass]]);
             $user = $query->getRow();
+            if ($newPass == $_POST['oldPass']) {
+                Application::getInstance()->flashMessages->add('Новый и старый пароль должны отличаться');
+                header('Location: /authentication/changePass');
+
+                exit;
+            }
             if ($newPass != $newPassConfirm) {
-                $this->app->flashMessages->add('Новый пароль и Подтверждение нового пароля не совпадают');
+                Application::getInstance()->flashMessages->add('Новый пароль и Подтверждение нового пароля не совпадают');
                 header('Location: /authentication/changePass');
 
                 exit;
             }
             if (!$user) { //если mysql на запрос не находит данных, то гетРоу вернет нулл и т.о. будет кастоваться к фолс, $user['password'] != $oldPass неправильно, т.к. нельзя обращатся к нуллу как к массиву
-                $this->app->flashMessages->add('Неверный старый пароль.');
+                Application::getInstance()->flashMessages->add('Неверный старый пароль.');
                 header('Location: /authentication/changePass');
 
                 exit;
             }
             $newHashedPass = $this->app->db->connection->real_escape_string(md5($newPass));
             $this->app->db->sendQuery("UPDATE authentic SET password='$newHashedPass'");
-            $this->app->flashMessages->add('Пароль изменен.');
+            Application::getInstance()->flashMessages->add('Пароль изменен.');
         }
 
         $this->render('changePass');

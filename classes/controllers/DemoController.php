@@ -1,6 +1,7 @@
 <?php
 namespace controllers;
 
+use Application;
 use City;
 use Controller;
 
@@ -43,8 +44,13 @@ class DemoController extends Controller
 
     public function testAction()
     {
-        $city = City::getById(1);
-        $city->name = 'sdfsdf';
-        $city->save();
+//        $city = City::getById(1);
+//        $city->name = 'sdfsdf';
+//        $city->save();
+//        if (Application::getInstance()->session->isUserLoggedIn) {
+//            echo '+';
+//        } else { echo '-'; }
+//        echo '<br><a href="\demo\hello">Назад</a>';
+        print_r(Application::getInstance()->user->getUser());
     }
 }
