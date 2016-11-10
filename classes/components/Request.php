@@ -1,5 +1,6 @@
 <?php
 namespace components;
+use Component;
 
 /**
  * Created by PhpStorm.
@@ -7,7 +8,7 @@ namespace components;
  * Date: 27.03.2016
  * Time: 23:44
  */
-class Request
+class Request extends Component
 {
     public function getParam($paramName)
     {

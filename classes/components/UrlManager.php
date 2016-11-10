@@ -1,5 +1,6 @@
 <?php
 namespace components;
+use Component;
 use Exception;
 use Route;
 
@@ -9,7 +10,7 @@ use Route;
  * Date: 16.03.2016
  * Time: 20:31
  */
-class UrlManager
+class UrlManager extends Component
 {
     /**
      * @return Route

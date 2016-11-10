@@ -1,6 +1,9 @@
 <?php
 namespace components;
+use Component;
+use Exception;
 use UserPanelWidget;
+require_once 'classes/Component.php';
 
 /**
  * Created by PhpStorm.
@@ -8,7 +11,7 @@ use UserPanelWidget;
  * Date: 30.03.2016
  * Time: 0:30
  */
-class Autoloader //загружает классы
+class Autoloader extends Component //загружает классы
 {
     public function getFileName($className)
     {
@@ -23,7 +26,7 @@ class Autoloader //загружает классы
     {
         if (!file_exists($this->getFileName($className))){
             debug_print_backtrace();
-            var_dump($className); exit;
+            throw new Exception('Класс ' . $className . ' не найден.');
 
         }
         require_once $this->getFileName($className);

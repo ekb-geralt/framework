@@ -26,8 +26,8 @@ $autoloader->register();
 $database = new Database();
 $database->connect('188.73.181.180', 'root', 'pi31415', 'Geralt'); //теперь адрес сервера БД в виде ip, т.к. убунта долго резолвит днс
 $session = new Session();
-$flashMessages = new FlashMessages($session);
-$user = new User($session, $database);
+$flashMessages = new FlashMessages();
+$user = new User();
 
 $request = new Request();
 $urlManager = new UrlManager();

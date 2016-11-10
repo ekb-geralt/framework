@@ -1,10 +1,11 @@
 <?php
 namespace components;
+use Component;
 
 /**
  * Class Session
  */
-class Session
+class Session  extends Component
 {
     function __construct()
     {

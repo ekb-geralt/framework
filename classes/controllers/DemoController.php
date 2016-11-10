@@ -44,6 +44,7 @@ class DemoController extends Controller
 
     public function testAction()
     {
+          ?><a href="\">На главную</a><br><?php
 //        $city = City::getById(1);
 //        $city->name = 'sdfsdf';
 //        $city->save();

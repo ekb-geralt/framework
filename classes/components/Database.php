@@ -1,5 +1,6 @@
 <?php
 namespace components;
+use Component;
 use DatabaseExpression;
 use Exception;
 use mysqli;
@@ -10,7 +11,7 @@ use mysqli;
  * Date: 27.04.2016
  * Time: 22:13
  */
-class Database
+class Database extends Component
 {
     /**
      * @var mysqli

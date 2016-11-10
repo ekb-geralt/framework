@@ -2,6 +2,7 @@
 namespace controllers;
 
 use Application;
+use Query;
 
 class AuthenticationController extends \Controller
 {
@@ -50,7 +51,7 @@ class AuthenticationController extends \Controller
             $newPassConfirm = $_POST['newPassConfirm'];
             $oldHashedPass = md5($_POST['oldPass']);
 
-            $query = new \Query($this->app->db);
+            $query = new Query($this->app->db);
             $query->select()->from('authentic')->where(['and', ['=', 'id', $this->app->session->loggedInUserId], ['=', 'password', $oldHashedPass]]);
             $user = $query->getRow();
             if ($newPass == $_POST['oldPass']) {
