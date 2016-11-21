@@ -93,4 +93,25 @@ class Database extends Component
             ? $name->getEscapedValue()
             : static::escapeName($name);
     }
+
+    /**
+     * @param $fields
+     * @return string
+     */
+    public function formatSetQuerySection($fields)
+    {
+        $keys = array_keys($fields); //получаем ключи из fields[] в виде нового массива, где они будут значениями
+        $values = array_values($fields);
+        $data = join(', ', array_map(function ($key, $value) { //array_map в данном случае сделает массив вида ключ = значение
+            if (is_null($value)) {
+                $sqlValue = 'NULL';
+            } else {
+                $sqlValue = "'" . $this->connection->real_escape_string($value) . "'";
+            }
+
+            return $this->escapeName($key) . ' = ' . $sqlValue;
+        }, $keys, $values));
+        
+        return $data;
+    }
 }

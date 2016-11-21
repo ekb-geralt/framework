@@ -52,6 +52,14 @@ class DemoController extends Controller
 //            echo '+';
 //        } else { echo '-'; }
 //        echo '<br><a href="\demo\hello">Назад</a>';
-        print_r(Application::getInstance()->user->getUser());
+//        print_r(Application::getInstance()->user->getUser());
+
+//        $newCity = new City();
+//        $newCity->name = 'blabla';
+//        $newCity->countryId = '1';
+//        $newCity->save();
+
+        $city = City::getById(1);
+        print_r($city->getFields());
     }
 }

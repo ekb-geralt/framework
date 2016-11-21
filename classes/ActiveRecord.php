@@ -6,6 +6,11 @@ abstract class ActiveRecord
      * @var int
      */
     public $id;
+
+    /**
+     * @var int
+     */
+    protected $currentDbId; //старый ид, является флагом, если объект загружен из базы, в нем будет старый айдишник
     
     /**
      * @return string
@@ -34,6 +39,7 @@ abstract class ActiveRecord
         }
         foreach ($query->getRows() as $row) {
             $object = new static;
+            $object->currentDbId = $row['id'];
             foreach ($row as $name => $value) {
                 $object->$name = $value; //object - это объект, и аожно после стрелки просто написать переменную в которой значение, или напрямую имя свойства, которое будет у объекта
             }
@@ -63,20 +69,47 @@ abstract class ActiveRecord
     public function save()
     {
         $database = Application::getInstance()->db;
-        $fields = (array)$this; //получаем список полей в БД
-        $keys = array_keys($fields); //получаем ключи из fields[] в виде нового массива, где они будут значениями
-        $values = array_values($fields);
-        $data = join(', ', array_map(function($key, $value) use ($database) { //array_map в данном случае сделает массив вида ключ = значение, use пробрасывает $database из родительской функции в безымянную
-            if (is_null($value)) {
-                $sqlValue = 'NULL';
-            } else {
-                $sqlValue = "'" . $database->connection->real_escape_string($value) . "'";
-            }
-            
-            return $database->escapeName($key) . ' = ' . $sqlValue;
-        }, $keys, $values));
-        $id = $database->connection->real_escape_string($this->id);
-        $query = 'UPDATE ' . $database->escapeName($this->getTableName()) . ' SET ' . $data . ' WHERE id = ' . $id;
+        $fields = $this->getFields();
+        $data = $database->formatSetQuerySection($fields);
+        if (isset($this->currentDbId)) {
+            $currentDbId = $database->connection->real_escape_string($this->currentDbId); //$this->id кладется во втором фориче в getObjects
+            $query = 'UPDATE ' . $database->escapeName($this->getTableName()) . ' SET ' . $data . ' WHERE id = ' . $currentDbId;
+        } else {
+            $query = 'INSERT ' . $database->escapeName($this->getTableName()) . ' SET ' . $data;
+        }
+
         $database->sendQuery($query);
+        if (!isset($this->currentDbId)) { //после save у этого объекта в id ничего нет, поэтому кладем туда значение
+            $this->id = $database->connection->insert_id;
+        }
+        $this->currentDbId = $this->id; // возваращаем в исходное состояние - при получении инфы о городе, например, есть id,
+        //и currentDbId равен id, что говорит нам о том, что мы взяли объект из бд. если в конце не вернуть все в исходное состояние, то при
+        //следующем таком же запросе метод будет работать со старыми данными
     }
+
+    public static function getTableColumns()
+    {
+        $database = Application::getInstance()->db;
+        $tableName = static::getTableName();
+        $query = 'SHOW COLUMNS FROM' . $database->escapeName($tableName);
+
+        return $database->sendQuery($query); // возвращает массив ассоциативных массивов
+    }
+
+    public static function getColumnNames()
+    {
+        return array_column(static::getTableColumns(), 'Field');
+    }
+
+    /**
+     * @return array Ассоциативный массив, где ключи - имена столбцов, а значения - значения одноименных свойств модели
+     */
+    public function getFields()
+    {
+        $columnNamesAsKeys = array_flip(static::getColumnNames());
+
+        return array_intersect_key((array)$this, $columnNamesAsKeys);//получаем список полей(столбцов) в БД, объект this кастуется как массив, id здесь
+    }
+
+
 }
