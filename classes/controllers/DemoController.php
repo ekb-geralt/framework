@@ -59,7 +59,10 @@ class DemoController extends Controller
 //        $newCity->countryId = '1';
 //        $newCity->save();
 
-        $city = City::getById(1);
-        print_r($city->getFields());
+//        $city = City::getById(1);
+//        print_r($city->getFields());
+
+        $city = City::getById(48);
+        $city->delete();
     }
 }

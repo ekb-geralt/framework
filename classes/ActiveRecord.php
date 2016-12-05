@@ -87,6 +87,18 @@ abstract class ActiveRecord
         //следующем таком же запросе метод будет работать со старыми данными
     }
 
+    public function delete()
+    {
+        if (is_null($this->currentDbId)) {
+            throw new Exception('Нет такого объекта в базе');
+        }
+        $database = Application::getInstance()->db;
+        $currentDbId = $database->connection->real_escape_string($this->currentDbId);
+        $query = 'DELETE FROM ' . $database->escapeName($this->getTableName()) . 'WHERE id = ' . $currentDbId;
+        $database->sendQuery($query);
+        $this->currentDbId = null;
+    }
+
     public static function getTableColumns()
     {
         $database = Application::getInstance()->db;
