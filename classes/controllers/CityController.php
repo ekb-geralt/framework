@@ -12,10 +12,8 @@ class CityController extends \Controller
 
     public function listAction()
     {
-        $query = new Query($this->app->db);
-        $query->select()->from('cities');
-        $cities = $query->getRows();
-        
+        $cities = City::getObjects();
+
         $this->render('list', [ // ['cities' => $cities] массив определяет связь между переменными в функции и во вьюхе(ключи - как называется переменные во вьюхе, значения, то, что у нас есть на руках, любой экспершшен, вычисленное до запуска рендера), он рапспаковывается во вьюхе с помощью extract метода render
             'cities' => $cities,
         ]);
@@ -27,7 +25,7 @@ class CityController extends \Controller
             throw new Exception('Не задан id города');
         }
 
-        $city = $this->getCity($_GET['id']);
+        $city = City::getById($_GET['id']);
         if (is_null($city)) {
             throw new Exception('Города с таким id не существует');
         }
