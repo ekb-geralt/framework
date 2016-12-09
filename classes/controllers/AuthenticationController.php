@@ -2,9 +2,10 @@
 namespace controllers;
 
 use Application;
+use Controller;
 use Query;
 
-class AuthenticationController extends \Controller
+class AuthenticationController extends Controller
 {
     public function loginAction()
     {
