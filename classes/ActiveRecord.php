@@ -12,6 +12,13 @@ abstract class ActiveRecord
      */
     protected $currentDbId; //старый ид, является флагом, если объект загружен из базы, в нем будет старый айдишник
     
+    public function __construct($isNew = true)
+    {
+        if ($isNew) {
+            $this->init();
+        }
+    }
+
     /**
      * @return string
      * Возвращает строку с именем таблицы, чтобы ActiveRecord мог построить запросы к соответствующей таблице
@@ -38,7 +45,7 @@ abstract class ActiveRecord
             $query->limit($limit);
         }
         foreach ($query->getRows() as $row) {
-            $object = new static;
+            $object = new static(false); //передаем конструктору команду не инициализировать, чтобы не затереть свойства, например
             $object->currentDbId = $row['id'];
             foreach ($row as $name => $value) {
                 $object->$name = $value; //object - это объект, и аожно после стрелки просто написать переменную в которой значение, или напрямую имя свойства, которое будет у объекта
@@ -108,6 +115,9 @@ abstract class ActiveRecord
         return $database->sendQuery($query); // возвращает массив ассоциативных массивов
     }
 
+    /**
+     * @return string[]
+     */
     public static function getColumnNames()
     {
         return array_column(static::getTableColumns(), 'Field');
@@ -123,5 +133,16 @@ abstract class ActiveRecord
         return array_intersect_key((array)$this, $columnNamesAsKeys);//получаем список полей(столбцов) в БД, объект this кастуется как массив, id здесь
     }
 
+    /**
+     * Инициализируем свойства у объекта
+     * Каждое свойство - это название столбца таблицы
+     */
+    protected function init()
+    {
+        $columnNames = static::getColumnNames();
+        foreach ($columnNames as $columnName) {
+            $this->$columnName = null;
+        }
+    }
 
 }
