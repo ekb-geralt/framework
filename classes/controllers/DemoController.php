@@ -54,15 +54,17 @@ class DemoController extends Controller
 //        echo '<br><a href="\demo\hello">Назад</a>';
 //        print_r(Application::getInstance()->user->getUser());
 
-//        $newCity = new City();
-//        $newCity->name = 'blabla';
-//        $newCity->countryId = '1';
-//        $newCity->save();
-
 //        $city = City::getById(1);
 //        print_r($city->getFields());
 
-        $city = City::getById(48);
-        $city->delete();
+//        $city = City::getById(48);
+//        $city->delete();
+
+//        print_r(new \DateTime(null));
+//        print_r(new \DateTime());
+//        var_dump(new \DateTime('1.1.0001'));
+        
+        $city = City::getById(1);
+        echo $city->creationDate;
     }
 }
