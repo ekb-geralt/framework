@@ -1,12 +1,14 @@
 <?php
 namespace controllers;
 use City;
+use Controller;
+use Country;
 use DatabaseFieldExpression;
 use DateTime;
 use Exception;
 use Query;
 
-class CityController extends \Controller
+class CityController extends Controller
 {
     public $defaultActionName = 'list';
 
@@ -59,14 +61,12 @@ class CityController extends \Controller
             $isSaved = true;
         }
 
-        $city = $this->getCity($_GET['id']);
+        $city = City::getById($_GET['id']);
         if (is_null($city)) {
             throw new Exception('Города с таким id не существует');
         }
 
-        $query = new Query($this->app->db);
-        $query->select(['name', 'id'])->from('countries');
-        $countries = $query->getRows();
+        $countries = Country::getObjects();
 
         $this->render('edit', [
             'city' => $city,
@@ -90,16 +90,19 @@ class CityController extends \Controller
 
     public function addAction()
     {
+        $city = new City(true);
         if (isset($_POST['submit'])) {
-            $name = $this->app->db->connection->real_escape_string($_POST['name']);
-            $population = $this->app->db->connection->real_escape_string($_POST['population']);
-            $isCapital = $this->app->db->connection->real_escape_string($_POST['isCapital']);
-            $creationDate = $this->app->db->connection->real_escape_string($_POST['creationDate']);
-            $unemploymentRate = $this->app->db->connection->real_escape_string($_POST['unemploymentRate']);
-            $countryId = $this->app->db->connection->real_escape_string($_POST['countryId']);
-            $this->app->db->sendQuery("INSERT cities SET name='$name', population='$population', isCapital = '$isCapital', creationDate = '$creationDate', unemploymentRate = '$unemploymentRate', countryId='$countryId'");
-            
-            $newCityId = $this->app->db->connection->insert_id; // вставка последнего переданного id или как-то так
+            $dbConnection = $this->app->db->connection;
+            $city->name = $dbConnection->real_escape_string($_POST['name']);
+            $city->population = $dbConnection->real_escape_string($_POST['population']);
+            $city->isCapital = $dbConnection->real_escape_string($_POST['isCapital']);
+            $city->creationDate = $dbConnection->real_escape_string($_POST['creationDate']);
+            if ($city->creationDate == '') { $city->creationDate = null; } //пустая строка, уходащая в базу, базой превращается в 0000-00-00, а не в нулл
+            $city->unemploymentRate = $dbConnection->real_escape_string($_POST['unemploymentRate']);
+            $city->countryId = $dbConnection->real_escape_string($_POST['countryId']);
+            $city->save();
+
+            $newCityId = $dbConnection->insert_id; // вставка последнего переданного id или как-то так
             $this->app->flashMessages->add('
                 Город добавлен.<br>
                 <a href="/city/edit?id=' . urlencode($newCityId) . '">Редактировать созданный город</a>
@@ -108,20 +111,16 @@ class CityController extends \Controller
 
             exit;
         }
+        
+        $countries = Country::getObjects();
 
-        $query = new Query($this->app->db);
-        $query->select(['name', 'id'])->from('countries');
-        $countries = $query->getRows();
-
-        $city = [
-            'id' => null, // в таблице стоит not null, но можно здесь так написать, т.к. в таблице же есть автоинкремент, нельзя пустую строку опять же из-за автоинкремента, т.к. пустая строка приведется к 0 и создастся город с ид = 0, а следующий раз 0 будет занят
-            'name' => '',
-            'population' => null,
-            'isCapital' => null,
-            'creationDate' => null,
-            'unemploymentRate' => null,
-            'countryId' => '', // здесь можно пустую строку
-        ];
+        $city->id = null;
+        $city->name = '';
+        $city->population = null;
+        $city->isCapital = null;
+        $city->creationDate = null;
+        $city->unemploymentRate = null;
+        $city->countryId = '';
 
         $this->render('edit', [
             'city' => $city,
@@ -133,15 +132,18 @@ class CityController extends \Controller
     public function deleteAction()
     {
         $id = $_GET['id'];
-        $city = $this->getCity($id);
+//        $city = $this->getCity($id);
+        $city = City::getById($id);
         if (!$city) {
             throw new Exception('Нет города с таким id');
         }
         if (isset($_POST['yes'])) {
-            $escapedId = $this->app->db->connection->real_escape_string($id); //экранируем именно здесь, потому, что именно здесь нужно экранированное имя, а раньше было не нужно
-            $this->app->db->sendQuery("DELETE FROM cities WHERE id='$escapedId'");//запрос и переадресация
+//            $escapedId = $this->app->db->connection->real_escape_string($id); //экранируем именно здесь, потому, что именно здесь нужно экранированное имя, а раньше было не нужно
+//            $this->app->db->sendQuery("DELETE FROM cities WHERE id='$escapedId'");//запрос и переадресация
 
-            $this->app->flashMessages->add('Город ' . $city['name'] . ' удален.');
+            $city->delete();
+
+            $this->app->flashMessages->add('Город ' . $city->name . ' удален.');
             header('Location: /city/list');
             
             exit;

@@ -13,8 +13,7 @@
 <?= $city->isCapital ? 'Да' : 'Нет' ?><br>
 Дата основания:
 <?php
-$creationDate = strtotime($city->creationDate);
-if ($creationDate != '') {echo date('d.m.o', $creationDate);} else {echo 'Не указана';}
+if ($city->creationDate) {echo date('d.m.o', strtotime($city->creationDate));} else {echo 'Не указана';}
 ?><br>
 Уровень безработицы:
 <?= 100 * $city->unemploymentRate ?>%<br>

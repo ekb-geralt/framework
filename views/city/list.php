@@ -1,7 +1,6 @@
 <?php
 /**
- * @var array[] $cities
- * @var Controller $this
+ * @var City $cities
  */
 ?>
 
