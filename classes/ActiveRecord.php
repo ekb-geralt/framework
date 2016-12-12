@@ -19,7 +19,25 @@ abstract class ActiveRecord
         }
     }
 
-    /**
+    public function __get($name)
+    {
+        if (in_array($name, self::getColumnNames())) {
+            return null;
+        }
+
+        throw new Exception('Нет такого свойства');
+    }
+
+    public function __set($name, $value)
+    {
+        if (in_array($name, self::getColumnNames())) {
+            $this->$name = $value;
+        } else {
+            throw new Exception('Нет такого свойства');
+        }
+    }
+
+        /**
      * @return string
      * Возвращает строку с именем таблицы, чтобы ActiveRecord мог построить запросы к соответствующей таблице
      */

@@ -1,12 +1,6 @@
 <?php
 use components\Database;
 
-/**
- * Created by PhpStorm.
- * User: Guest
- * Date: 04.05.2016
- * Time: 21:59
- */
 class Query
 {
     /**
@@ -177,7 +171,7 @@ class Query
         return $name;
     }
 
-    protected function formatCondition($condition) // [=, operand, {operand}] обратная польская нотация, оператор, в зав-ти от него операнды
+    protected function formatCondition($condition) // [=, operand, {operand}] обратная польская нотация, оператор, в зав-ти от него операнды, первая операнда имя, второе - значение
     {
         switch ($condition[0]) {
             case '=':

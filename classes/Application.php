@@ -7,12 +7,6 @@ use components\Session;
 use components\UrlManager;
 use components\User;
 
-/**
- * Created by PhpStorm.
- * User: Guest
- * Date: 17.03.2016
- * Time: 1:33
- */
 class Application
 {
     public $defaultControllerName = 'demo';

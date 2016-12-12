@@ -66,5 +66,9 @@ class DemoController extends Controller
         
         $city = City::getById(1);
         echo $city->creationDate;
+
+        $country = \Country::getById(1);
+        var_dump($country->getCities());
+
     }
 }

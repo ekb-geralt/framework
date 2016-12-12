@@ -2,11 +2,11 @@
 
 /**
  * Class Country
- * @property $id int
- * @property $name string
- * @property $capitalId int
- * @property $population string
- * @property $area string
+ * @property int $id
+ * @property string $name
+ * @property int $capitalId
+ * @property string $population
+ * @property string $area
  */
 class Country extends ActiveRecord
 {
@@ -16,11 +16,16 @@ class Country extends ActiveRecord
     }
 
     /**
-     * Âîçâğàùàåò ñòîëèöó ñòğàíû
+     * Ğ’Ğ¾Ğ·Ğ²Ñ€Ğ°Ñ‰Ğ°ĞµÑ‚ ÑÑ‚Ğ¾Ğ»Ğ¸Ñ†Ñƒ ÑÑ‚Ñ€Ğ°Ğ½Ñ‹
      * @return City|null
      */
     public function getCapital()
     {
         return City::getById($this->capitalId);
+    }
+
+    public function getCities()
+    {
+        return City::getObjects(['=', 'countryId', $this->id]);
     }
 }

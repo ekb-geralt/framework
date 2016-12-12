@@ -3,10 +3,8 @@ namespace controllers;
 use City;
 use Controller;
 use Country;
-use DatabaseFieldExpression;
 use DateTime;
 use Exception;
-use Query;
 
 class CityController extends Controller
 {
@@ -43,27 +41,21 @@ class CityController extends Controller
             throw new Exception('Не задан id города');
         }
 
+        $city = City::getById($_GET['id']);
+        if (is_null($city)) {
+            throw new Exception('Города с таким id не существует');
+        }
+
         $isSaved = false;
         if (isset($_POST['submit'])) { //в button это name=
-            $city = City::getById($_GET['id']);
             $city->name = $_POST['name'];
             $city->population = $_POST['population'];
             $city->isCapital = $_POST['isCapital'];
-            if ($_POST['creationDate'] == '') {
-                $creationDate = null;
-            } else {
-                $creationDate = (new DateTime($_POST['creationDate']))->format('Y-m-d');
-            }
-            $city->creationDate = $creationDate;
+            $city->creationDateObject = $_POST['creationDate'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDate']);
             $city->unemploymentRate = $_POST['unemploymentRate'];
             $city->countryId = $_POST['countryId'];
             $city->save();
             $isSaved = true;
-        }
-
-        $city = City::getById($_GET['id']);
-        if (is_null($city)) {
-            throw new Exception('Города с таким id не существует');
         }
 
         $countries = Country::getObjects();
@@ -75,37 +67,21 @@ class CityController extends Controller
         ]);
     }
 
-    /**
-     * @param $id int
-     * @return string[]
-     */
-    public function getCity($id)
-    {
-        $query = new Query($this->app->db);
-        $query->select(['cities.*', 'countries.name AS countryName'])->from('cities')->leftJoin('countries', ['=', 'cities.countryId', new DatabaseFieldExpression('countries.id')])->where(['=', 'cities.id', $id]); //можно написать просто id, а не cities.id, так как в выборке нет второго столбца с именем id
-        $city = $query->getRow();
-
-        return $city;
-    }
-
     public function addAction()
     {
-        $city = new City(true);
+        $city = new City(); // можно написать (true), но лучше не надо, т.к. там по умолчанию true
         if (isset($_POST['submit'])) {
-            $dbConnection = $this->app->db->connection;
-            $city->name = $dbConnection->real_escape_string($_POST['name']);
-            $city->population = $dbConnection->real_escape_string($_POST['population']);
-            $city->isCapital = $dbConnection->real_escape_string($_POST['isCapital']);
-            $city->creationDate = $dbConnection->real_escape_string($_POST['creationDate']);
-            if ($city->creationDate == '') { $city->creationDate = null; } //пустая строка, уходащая в базу, базой превращается в 0000-00-00, а не в нулл
-            $city->unemploymentRate = $dbConnection->real_escape_string($_POST['unemploymentRate']);
-            $city->countryId = $dbConnection->real_escape_string($_POST['countryId']);
+            $city->name = $_POST['name']; //здесь не надо экранировать, т.к. экранирование происходит при вызове save в методе formatSetQuerySection
+            $city->population = $_POST['population'];
+            $city->isCapital = $_POST['isCapital'];
+            $city->creationDateObject = $_POST['creationDate'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDate']);
+            $city->unemploymentRate = $_POST['unemploymentRate'];
+            $city->countryId = $_POST['countryId'];
             $city->save();
 
-            $newCityId = $dbConnection->insert_id; // вставка последнего переданного id или как-то так
             $this->app->flashMessages->add('
                 Город добавлен.<br>
-                <a href="/city/edit?id=' . urlencode($newCityId) . '">Редактировать созданный город</a>
+                <a href="/city/edit?id=' . urlencode($city->id) . '">Редактировать созданный город</a>
             '); // здесь текстовое сообщение, которое по умолчанию html, оно содержится в ''
             header('Location: /city/list');
 
@@ -113,14 +89,6 @@ class CityController extends Controller
         }
         
         $countries = Country::getObjects();
-
-        $city->id = null;
-        $city->name = '';
-        $city->population = null;
-        $city->isCapital = null;
-        $city->creationDate = null;
-        $city->unemploymentRate = null;
-        $city->countryId = '';
 
         $this->render('edit', [
             'city' => $city,
@@ -131,16 +99,15 @@ class CityController extends Controller
 
     public function deleteAction()
     {
+        if (!isset($_GET['id']) || !$_GET['id']) { //!$_GET['id'] кастуется к булевому значению, 0, нулл, пустая строка, пустой массив и т.д. кастуется в false, но не надо привыкать так делать, т.к. иногда нужны более строгие проверки, например 0 тоже кастуется к false
+            throw new Exception('Не задан id города');
+        }
         $id = $_GET['id'];
-//        $city = $this->getCity($id);
         $city = City::getById($id);
         if (!$city) {
             throw new Exception('Нет города с таким id');
         }
         if (isset($_POST['yes'])) {
-//            $escapedId = $this->app->db->connection->real_escape_string($id); //экранируем именно здесь, потому, что именно здесь нужно экранированное имя, а раньше было не нужно
-//            $this->app->db->sendQuery("DELETE FROM cities WHERE id='$escapedId'");//запрос и переадресация
-
             $city->delete();
 
             $this->app->flashMessages->add('Город ' . $city->name . ' удален.');
@@ -153,7 +120,7 @@ class CityController extends Controller
             exit;
         }
         
-        $this->render('delete',[
+        $this->render('delete', [
             'city' => $city,
         ]);
     }

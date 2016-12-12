@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Guest
- * Date: 27.03.2016
- * Time: 22:11
- */
 abstract class Controller //с abstract запрещается создание экземпляра этого класса
 {
     public $defaultActionName = 'default';
