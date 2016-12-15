@@ -10,28 +10,11 @@
  * @property float $unemploymentRate
  * @property int $countryId
  * @property DateTime $creationDateObject
+ * @property-read Country $country
  * пишем какие свойства есть у объекта, для IDE
  */
 class City extends ActiveRecord
 {
-    public function __get($name)// магический геттер имеет 1 аргумент - имя свойства, к которому идет обращение
-    {
-        if ($name == 'creationDateObject') {
-            return $this->getCreationDateObject();
-        }
-        
-        return parent::__get($name);
-    }
-
-    public function __set($name, $value)
-    {
-        if ($name == 'creationDateObject') {
-            $this->setCreationDateObject($value);
-        } else {
-            parent::__set($name, $value);
-        }
-    }
-
     /**
      * @return DateTime|null
      */

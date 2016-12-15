@@ -7,6 +7,8 @@
  * @property int $capitalId
  * @property string $population
  * @property string $area
+ * @property-read City $capital
+ * @property-read City[] $cities
  */
 class Country extends ActiveRecord
 {
