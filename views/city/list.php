@@ -1,6 +1,7 @@
 <?php
 /**
- * @var City $cities
+ * @var City[] $cities
+ * @var City $city
  */
 ?>
 

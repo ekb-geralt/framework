@@ -1,6 +1,6 @@
 <?php
 /**
- * @var array[] $city
+ * @var City $city
  */
 ?>
 <form method="post">

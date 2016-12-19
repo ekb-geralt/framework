@@ -2,7 +2,7 @@
 /**
  * @var City $city
  * @var bool $isSaved
- * @var Country $countries
+ * @var Country[] $countries
  * @var Country $country
  */
 ?>
@@ -16,11 +16,8 @@
     <label for="isCapital">Является столицей</label><br>
     <input name="isCapital" value="<?= htmlspecialchars($city->isCapital) ?>" id="isCapital"><br>
 
-    <?php
-    $creationDate = is_null($city->creationDate) ? '' : (new DateTime($city->creationDate))->format('d.m.Y');
-    ?>
     <label for="creationDate">Дата основания</label><br>
-    <input name="creationDate" value="<?= htmlspecialchars($creationDate) ?>" id="creationDate"><br>
+    <input name="creationDate" value="<?= htmlspecialchars($city->creationDate) ?>" id="creationDate"><br>
 
     <label for="unemploymentRate">Уровень безработицы</label><br>
     <input name="unemploymentRate" value="<?= htmlspecialchars($city->unemploymentRate) ?>" id="unemploymentRate"><br>

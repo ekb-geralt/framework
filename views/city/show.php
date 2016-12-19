@@ -19,4 +19,5 @@ if ($city->creationDateObject) {echo $city->creationDateObject->format('d.m.Y');
 <?= 100 * $city->unemploymentRate ?>%<br>
 Страна:
 <a href="/country/show?id=<?= urlencode($city->countryId) ?>"><?= htmlspecialchars($city->getCountry()->name) ?></a><br>
-<a href="/city/list">К списку</a>
+<a href="/city/list">К списку городов</a> |
+<a href="/country/list">К списку стран</a>
