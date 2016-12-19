@@ -10,7 +10,7 @@
 Численность населения:
 <?= htmlspecialchars($country->population) ?><br>
 Столица:
-<?php if ($country->capital) { ?>
+<?php if ($country->capital) { ?> <!-- capital - магическое свойство -->
     <?php $capitalName = $country->capital->name; ?>
     <a href="/city/show?id=<?= urlencode($country->capitalId) ?>"><?= htmlspecialchars($capitalName) ?></a><br>
 <?php }  else { $capitalName =  'Не указана'; ?>

@@ -171,4 +171,9 @@ abstract class ActiveRecord
         }
     }
 
+    public function getFieldLabels() //получаем список полей
+    {
+        return [];
+    }
+
 }

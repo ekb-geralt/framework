@@ -49,4 +49,11 @@ class City extends ActiveRecord
         return Country::getById($this->countryId);
     }
 
+    public function getFieldLabels()
+    {
+        return [
+            'name' => 'Название',
+        ];
+    }
+
 }

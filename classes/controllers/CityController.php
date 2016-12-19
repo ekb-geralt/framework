@@ -51,7 +51,7 @@ class CityController extends Controller
             $city->name = $_POST['name'];
             $city->population = $_POST['population'];
             $city->isCapital = $_POST['isCapital'];
-            $city->creationDateObject = $_POST['creationDate'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDate']);
+            $city->creationDateObject = $_POST['creationDateObject'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDateObject']);
             $city->unemploymentRate = $_POST['unemploymentRate'];
             $city->countryId = $_POST['countryId'];
             $city->save();
@@ -74,7 +74,7 @@ class CityController extends Controller
             $city->name = $_POST['name']; //здесь не надо экранировать, т.к. экранирование происходит при вызове save в методе formatSetQuerySection
             $city->population = $_POST['population'];
             $city->isCapital = $_POST['isCapital'];
-            $city->creationDateObject = $_POST['creationDate'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDate']);
+            $city->creationDateObject = $_POST['creationDateObject'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDateObject']);
             $city->unemploymentRate = $_POST['unemploymentRate'];
             $city->countryId = $_POST['countryId'];
             $city->save();
