@@ -98,9 +98,14 @@ abstract class ActiveRecord
 
     /**
      * @throws Exception
+     * @return bool
      */
     public function save()
     {
+        if (!$this->isValid()) {
+            return false;
+        }
+        
         $database = Application::getInstance()->db;
         $fields = $this->getFields();
         $data = $database->formatSetQuerySection($fields);
@@ -118,6 +123,8 @@ abstract class ActiveRecord
         $this->currentDbId = $this->id; // возваращаем в исходное состояние - при получении инфы о городе, например, есть id,
         //и currentDbId равен id, что говорит нам о том, что мы взяли объект из бд. если в конце не вернуть все в исходное состояние, то при
         //следующем таком же запросе метод будет работать со старыми данными
+        
+        return true;
     }
 
     public function delete()
@@ -174,6 +181,29 @@ abstract class ActiveRecord
     public function getFieldLabels() //получаем список полей
     {
         return [];
+    }
+
+    public function getValidationRules()
+    {
+        return [];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        $rules = $this->getValidationRules();
+        foreach ($rules as $rule) {
+            $name = $rule['field'];
+            $params = isset($rule['params']) ? $rule['params'] : [];
+            $result = call_user_func([$rule['validator'], 'isValid'], $this->$name, $params);
+            if (!$result) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
 }

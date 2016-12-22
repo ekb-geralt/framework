@@ -46,7 +46,6 @@ class CityController extends Controller
             throw new Exception('Города с таким id не существует');
         }
 
-        $isSaved = false;
         if (isset($_POST['submit'])) { //в button это name=
             $city->name = $_POST['name'];
             $city->population = $_POST['population'];
@@ -54,15 +53,26 @@ class CityController extends Controller
             $city->creationDateObject = $_POST['creationDateObject'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDateObject']);
             $city->unemploymentRatePercent = $_POST['unemploymentRatePercent'];
             $city->countryId = $_POST['countryId'];
-            $city->save();
-            $isSaved = true;
+            $isSaved = $city->save();
+
+            if (!$isSaved) {
+                $this->app->flashMessages->add('Не сохранено');
+            } else {
+                $this->app->flashMessages->add('
+                    Город добавлен.<br>
+                    <a href="/city/edit?id=' . urlencode($city->id) . '">Редактировать созданный город</a>
+                '); // здесь текстовое сообщение, которое по умолчанию html, оно содержится в ''
+                header('Location: /city/list');
+
+                exit;
+            }
         }
+
 
         $countries = Country::getObjects();
 
         $this->render('edit', [
             'city' => $city,
-            'isSaved' => $isSaved,
             'countries' => $countries,
         ]);
     }
@@ -77,15 +87,19 @@ class CityController extends Controller
             $city->creationDateObject = $_POST['creationDateObject'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDateObject']);
             $city->unemploymentRatePercent = $_POST['unemploymentRatePercent'];
             $city->countryId = $_POST['countryId'];
-            $city->save();
+            $isSaved = $city->save();
 
-            $this->app->flashMessages->add('
-                Город добавлен.<br>
-                <a href="/city/edit?id=' . urlencode($city->id) . '">Редактировать созданный город</a>
-            '); // здесь текстовое сообщение, которое по умолчанию html, оно содержится в ''
-            header('Location: /city/list');
+            if (!$isSaved) {
+                $this->app->flashMessages->add('Не сохранено');
+            } else {
+                $this->app->flashMessages->add('
+                    Город добавлен.<br>
+                    <a href="/city/edit?id=' . urlencode($city->id) . '">Редактировать созданный город</a>
+                '); // здесь текстовое сообщение, которое по умолчанию html, оно содержится в ''
+                header('Location: /city/list');
 
-            exit;
+                exit;
+            }
         }
         
         $countries = Country::getObjects();

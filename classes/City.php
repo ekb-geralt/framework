@@ -1,4 +1,5 @@
 <?php
+use validators\EmptyValidator;
 
 /**
  * Class City
@@ -11,7 +12,7 @@
  * @property int $countryId
  * @property DateTime $creationDateObject
  * @property-read Country $country
- * @property $unemploymentRatePercent
+ * @property float $unemploymentRatePercent
  * пишем какие свойства есть у объекта, для IDE
  */
 class City extends ActiveRecord
@@ -64,6 +65,13 @@ class City extends ActiveRecord
     {
         return [
             'name' => 'Название',
+        ];
+    }
+
+    public function getValidationRules()
+    {
+        return [
+            ['field' => 'name', 'validator' => EmptyValidator::class, 'params' => ['not' => true]], //здесь надо указывать полный путь или объявлять использование класса
         ];
     }
 }
