@@ -52,7 +52,7 @@ class CityController extends Controller
             $city->population = $_POST['population'];
             $city->isCapital = $_POST['isCapital'];
             $city->creationDateObject = $_POST['creationDateObject'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDateObject']);
-            $city->unemploymentRate = $_POST['unemploymentRate'];
+            $city->unemploymentRatePercent = $_POST['unemploymentRatePercent'];
             $city->countryId = $_POST['countryId'];
             $city->save();
             $isSaved = true;
@@ -75,7 +75,7 @@ class CityController extends Controller
             $city->population = $_POST['population'];
             $city->isCapital = $_POST['isCapital'];
             $city->creationDateObject = $_POST['creationDateObject'] == '' ? null : DateTime::createFromFormat('d.m.Y', $_POST['creationDateObject']);
-            $city->unemploymentRate = $_POST['unemploymentRate'];
+            $city->unemploymentRatePercent = $_POST['unemploymentRatePercent'];
             $city->countryId = $_POST['countryId'];
             $city->save();
 

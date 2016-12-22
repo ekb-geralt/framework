@@ -16,7 +16,7 @@
 if ($city->creationDateObject) {echo $city->creationDateObject->format('d.m.Y');} else {echo 'Не указана';}
 ?><br>
 Уровень безработицы:
-<?= 100 * $city->unemploymentRate ?>%<br>
+<?= $city->unemploymentRatePercent ?>%<br>
 Страна:
 <a href="/country/show?id=<?= urlencode($city->countryId) ?>"><?= htmlspecialchars($city->getCountry()->name) ?></a><br>
 <a href="/city/list">К списку городов</a> |

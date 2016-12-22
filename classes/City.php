@@ -11,6 +11,7 @@
  * @property int $countryId
  * @property DateTime $creationDateObject
  * @property-read Country $country
+ * @property $unemploymentRatePercent
  * пишем какие свойства есть у объекта, для IDE
  */
 class City extends ActiveRecord
@@ -29,6 +30,16 @@ class City extends ActiveRecord
     public function setCreationDateObject($value)
     {
         $this->creationDate = $value ? $value->format('Y-m-d') : null;
+    }
+
+    public function getUnemploymentRatePercent()
+    {
+        return isset($this->unemploymentRate) ? $this->unemploymentRate * 100 : null;
+    }
+
+    public function setUnemploymentRatePercent($value)
+    {
+        $this->unemploymentRate = $value ? $value / 100 : null;
     }
     
     /**
@@ -55,5 +66,4 @@ class City extends ActiveRecord
             'name' => 'Название',
         ];
     }
-
 }

@@ -43,6 +43,14 @@ class Form
         return $this->_input($name, $value);
     }
 
+    public function unemploymentRatePercentInput($name)
+    {
+        $value = $this->model->$name;
+        $value = is_null($value) ? null : $value;
+        
+        return $this->_input($name, $value);
+    }
+
     public function label($name)
     {
         $labels = $this->model->getFieldLabels();

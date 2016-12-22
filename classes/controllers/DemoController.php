@@ -65,9 +65,9 @@ class DemoController extends Controller
 //        var_dump(new \DateTime('1.1.0001'));
         
         $city = City::getById(1);
-//        echo $city->creationDate;
+        echo $city->unemploymentRatePercent;
         
-        var_dump($city->country);
+//        var_dump($city->country);
 
         $country = \Country::getById(1);
 //        var_dump($country->getCities());

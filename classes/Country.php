@@ -30,4 +30,14 @@ class Country extends ActiveRecord
     {
         return City::getObjects(['=', 'countryId', $this->id]);
     }
+
+    public function getFieldLabels()
+    {
+        return [
+            'name' => 'Название',
+            'capitalId' => 'Столица',
+            'population' => 'Численность населения',
+            'area' => 'Площадь',
+        ];
+    }
 }

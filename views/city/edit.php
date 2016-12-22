@@ -23,8 +23,8 @@ $form = new Form($city);
     <label for="creationDateObject">Дата основания</label><br>
     <?= $form->dateInput('creationDateObject') ?><br>
 
-    <label for="unemploymentRate">Уровень безработицы</label><br>
-    <?= $form->input('unemploymentRate') ?><br>
+    <label for="unemploymentRatePercent">Уровень безработицы</label><br>
+    <?= $form->input('unemploymentRatePercent') ?><br>
 
     <label for="countryId">Название страны</label><br>
     <select id="countryId" name="countryId">
